@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ble-temp (prod)",
+      "program": "lib/main_prod.dart",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--flavor",
+        "prod"
+      ]
+    },
+    {
+      "name": "ble-temp (sim)",
+      "program": "lib/main_sim.dart",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--flavor",
+        "sim"
+      ]
+    },
+  ],
+  "compounds": []
+}

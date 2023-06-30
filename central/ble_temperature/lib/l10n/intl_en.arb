@@ -1,0 +1,44 @@
+{
+    "appTitle":"BLETemp",
+    "screenPermissionsTitle": "Permissions",
+    "screenPermissionsConnectTitle": "Bluetooth Connect",
+    "screenPermissionsConnectBody": "Required to connect your devices nearby using Bluetooth.",
+    "screenPermissionsScanTitle": "Bluetooth Scan",
+    "screenPermissionsScanBody": "Is required to find devices nearby using Bluetooth.",
+    "screenPermissionStatus": "Status: ",
+    "screenPermissionsDenied": "denied",
+    "screenPermissionsGranted": "granted",
+    "screenPermissionsLimited": "limited",
+    "screenPermissionsPermanentlyDenied": "permanently denied",
+    "screenPermissionsRequestPermission": "Grant permission",
+    "screenPermissionsRestricted": "restricted",
+    "screenPermissionsOpenSettings": "Open app settings",
+    "screenPermissionsContinue": "continue",
+
+    "screenPermissionLegacyLocationTitle": "Location permission",
+    "screenPermissionLegacyLocationBody": "On older Android devices, location permission is required to find and connect your Bluetooth devices. The location is not determined by the app.",
+    "screenPermissionLegacyLocationServiceTitle": "Location service",
+    "screenPermissionLegacyLocationServiceActiv": "active",
+    "screenPermissionLegacyLocationServiceBody": "In addition to location permission, location service must be enabled to find and connect your Bluetooth devices.",
+    "screenPermissionLegacyLocationServiceInactiv": "inactive",
+    "screenPermissionLegacyLocationServiceOpen": "Manage location service",
+   
+    "bleInitWaiting": "Initializing Bluetooth. Please make sure you have turned on Bluetooth on your mobile device.",
+
+    "scanPageTitle": "Discovered devices",
+
+    "livePageCardTitle": "Temperature",
+    "livePageUnit": "°C",
+    "livePageError": "An unexpected error occurred. Please check if the peripheral is in range and powered.",
+    "livePageLabelRetry": "Retry",
+
+    "settingsPageTitle": "Settings",
+
+    "aboutPageTitle": "About",
+    "aboutPageHeaderTitle": "Daniel Wolf",
+    "aboutPageHeaderSubtitle": "Software Developer",
+    "aboutPageUrlLinkedIn": " https://www.linkedin.com/in/daniel-wolf-31471626b/",
+    "aboutPageUrlGitHub": "https://github.com/d-wolf/",
+    "aboutPageText": "This project demonstrates how to create a simple Bluetooth Low Energy cross-platform application using Flutter. If you have set up your peripheral correctly it should be shown on the discovery page. If you are going to click the peripheral a connection will be established and temperature values will be updated continuously.\n\nTo get in contact please hit the LinkedIn icon above. Hit the GitHub icon to check out the source code.",
+    "aboutPageVersion": "Version"
+}
