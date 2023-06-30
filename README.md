@@ -4,7 +4,7 @@ This Project shows how to use  Bluetooth® Low Energy (BLE) to send temperature 
 
 
 
-https://github.com/d-wolf/flutter_ble_arduino_temperature/assets/3867384/36a83bac-d35b-4658-85c0-fa07ba6425d5
+https://github.com/d-wolf/flutter_ble_arduino_temperature/assets/3867384/bda0d269-b9e3-4126-b2c4-27b309e74c9d
 
 
 
