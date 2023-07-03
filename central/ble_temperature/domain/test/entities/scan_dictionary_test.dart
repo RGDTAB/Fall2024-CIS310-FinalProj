@@ -43,5 +43,12 @@ void main() {
       final scans = const ScanDictionary().addItem(d1).addItem(d1);
       expect(scans.items, {d1.id: d1});
     });
+
+    test('empty scans - add immutable throws', () {
+      var map = <String, DiscoveredDevice>{};
+      final scans = ScanDictionary(map);
+
+      expect(() => scans.items['1'] = d1, throwsA(isA<UnsupportedError>()));
+    });
   });
 }
