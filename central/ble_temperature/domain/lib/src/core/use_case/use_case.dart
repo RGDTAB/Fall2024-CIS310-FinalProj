@@ -17,14 +17,3 @@ class NoParams with _$NoParams {
   factory NoParams.fromJson(Map<String, dynamic> json) =>
       _$NoParamsFromJson(json);
 }
-
-@freezed
-class Person with _$Person {
-  const factory Person({
-    required String firstName,
-    required String lastName,
-    required int age,
-  }) = _Person;
-
-  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
-}
