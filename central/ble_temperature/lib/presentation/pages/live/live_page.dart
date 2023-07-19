@@ -1,4 +1,3 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -9,17 +8,18 @@ import '../../../generated/l10n.dart';
 import '../../../globals.dart';
 import '../../bloc/live/live_cubit.dart';
 import '../widgets/thermostat/thermostat.dart';
+import 'live_page_params.dart';
 
 class LivePage extends StatelessWidget {
-  final DiscoveredDevice device;
+  final LivePageParams params;
 
-  const LivePage({required this.device, super.key});
+  const LivePage({required this.params, super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LiveCubit(
-        device: device,
+        device: params.device,
         ucConnect: getIt(),
         ucGetData: getIt(),
       )..init(),
@@ -28,7 +28,7 @@ class LivePage extends StatelessWidget {
           return state.when(loading: () {
             return Scaffold(
               appBar: AppBar(
-                title: Text(device.name),
+                title: Text(params.device.name),
                 actions: [
                   IconButton(
                       onPressed: () {
@@ -42,7 +42,7 @@ class LivePage extends StatelessWidget {
           }, update: (value) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(device.name),
+                title: Text(params.device.name),
                 actions: [
                   IconButton(
                       onPressed: () {
@@ -89,7 +89,7 @@ class LivePage extends StatelessWidget {
           }, error: () {
             return Scaffold(
               appBar: AppBar(
-                title: Text(device.name),
+                title: Text(params.device.name),
                 actions: [
                   IconButton(
                       onPressed: () {

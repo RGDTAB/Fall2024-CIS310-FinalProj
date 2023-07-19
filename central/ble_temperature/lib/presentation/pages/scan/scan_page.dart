@@ -1,3 +1,4 @@
+import 'package:ble_temperature/presentation/pages/live/live_page_params.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,8 +45,10 @@ class ScanPage extends StatelessWidget {
                           subtitle: Text(scan.id),
                           onTap: () {
                             context.read<ScanCubit>().stopScan();
-                            Navigator.of(context).pushNamed(Routes.livePage,
-                                arguments: [scan]).then((value) {
+                            Navigator.of(context)
+                                .pushNamed(Routes.livePage,
+                                    arguments: LivePageParams(device: scan))
+                                .then((value) {
                               context.read<ScanCubit>().startScan();
                             });
                           },

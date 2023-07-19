@@ -1,3 +1,4 @@
+import 'package:ble_temperature/presentation/pages/live/live_page_params.dart';
 import 'package:flutter/material.dart';
 
 import '../presentation/pages/about/about_page.dart';
@@ -25,29 +26,36 @@ class RouteGenerator {
       case Routes.permissionsPage:
         return MaterialPageRoute(
           builder: (_) => const PermissionsPage(),
+          settings: settings,
         );
       case Routes.permissionsLegacyPage:
         return MaterialPageRoute(
           builder: (_) => const PermissionsLegacyPage(),
+          settings: settings,
         );
       case Routes.bleInitPage:
         return MaterialPageRoute(
           builder: (_) => const InitBlePage(),
+          settings: settings,
         );
       case Routes.scanPage:
         return MaterialPageRoute(
           builder: (_) => const ScanPage(),
+          settings: settings,
         );
       case Routes.livePage:
-        final args = settings.arguments as List;
+        assert(settings.arguments is LivePageParams,
+            'Parameters must be of type $LivePageParams.');
         return MaterialPageRoute(
           builder: (_) => LivePage(
-            device: args[0],
+            params: settings.arguments as LivePageParams,
           ),
+          settings: settings,
         );
       case Routes.aboutPage:
         return MaterialPageRoute(
           builder: (_) => const AboutPage(),
+          settings: settings,
         );
 
       default:
@@ -55,6 +63,7 @@ class RouteGenerator {
           builder: (_) => ErrorPage(
             param: settings,
           ),
+          settings: settings,
         );
     }
   }
