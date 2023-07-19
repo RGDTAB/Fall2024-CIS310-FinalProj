@@ -1,10 +1,10 @@
-import 'package:ble_temperature/config/app_styles.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../config/app_routes.dart';
+import '../../../config/app_styles.dart';
 import '../../../globals.dart';
 import '../../bloc/permissions/permissions_cubit.dart';
 import '../widgets/permission_status_widget.dart';

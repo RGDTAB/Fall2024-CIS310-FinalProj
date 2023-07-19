@@ -1,4 +1,3 @@
-import '../live/live_page_params.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +5,7 @@ import '../../../config/app_routes.dart';
 import '../../../generated/l10n.dart';
 import '../../../globals.dart';
 import '../../bloc/scan/scan_cubit.dart';
+import '../live/live_page_params.dart';
 
 class ScanPage extends StatelessWidget {
   const ScanPage({super.key});

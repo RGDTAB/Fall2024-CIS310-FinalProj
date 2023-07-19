@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../core/use_case/failure.dart';
+import '../../core/use_case/common_interfaces.dart';
 import '../../core/use_case/use_case.dart';
 import '../../facades/device_info/device_info_facade.dart';
 import '../../facades/permissions/permission_status.dart';
@@ -11,14 +11,16 @@ import '../../facades/permissions/permissions_facade.dart';
 
 part 'permissions_check.freezed.dart';
 
-class PermissionsCheck implements UseCase<PermissionsCheckResult, NoParams> {
+class PermissionsCheck
+    implements UseCase<NoFailure, PermissionsCheckResult, NoParams> {
   final DeviceInfoFacade _deviceInfoFacade;
   final PermissionsFacade _permissionsFacade;
 
   PermissionsCheck(this._deviceInfoFacade, this._permissionsFacade);
 
   @override
-  Future<Either<Failure, PermissionsCheckResult>> call(NoParams params) async {
+  Future<Either<NoFailure, PermissionsCheckResult>> call(
+      NoParams params) async {
     if (Platform.isIOS) {
       return right(PermissionsCheckResult(hasAllPermissions: true));
     } else {
