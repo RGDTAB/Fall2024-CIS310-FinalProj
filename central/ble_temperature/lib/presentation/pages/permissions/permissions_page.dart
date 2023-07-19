@@ -1,3 +1,4 @@
+import 'package:ble_temperature/config/app_styles.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,26 +94,29 @@ class _PermissionsPageState extends State<PermissionsPage>
         title: Text(S.of(context).screenPermissionsTitle),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PermissionStatusWidget(
-                title: S.of(context).screenPermissionsScanTitle,
-                body: S.of(context).screenPermissionsScanBody,
-                status: statusScan,
-                action: S.of(context).screenPermissionsRequestPermission,
-                onPressed: () {
-                  context.read<PermissionsCubit>().requestScan();
-                }),
-            PermissionStatusWidget(
-                title: S.of(context).screenPermissionsConnectTitle,
-                body: S.of(context).screenPermissionsConnectBody,
-                status: statusConnect,
-                action: S.of(context).screenPermissionsRequestPermission,
-                onPressed: () {
-                  context.read<PermissionsCubit>().requestConnect();
-                }),
-          ],
+        child: Padding(
+          padding: AppStyles.edgeInsetsSmall,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PermissionStatusWidget(
+                  title: S.of(context).screenPermissionsScanTitle,
+                  body: S.of(context).screenPermissionsScanBody,
+                  status: statusScan,
+                  action: S.of(context).screenPermissionsRequestPermission,
+                  onPressed: () {
+                    context.read<PermissionsCubit>().requestScan();
+                  }),
+              PermissionStatusWidget(
+                  title: S.of(context).screenPermissionsConnectTitle,
+                  body: S.of(context).screenPermissionsConnectBody,
+                  status: statusConnect,
+                  action: S.of(context).screenPermissionsRequestPermission,
+                  onPressed: () {
+                    context.read<PermissionsCubit>().requestConnect();
+                  }),
+            ],
+          ),
         ),
       ),
     );

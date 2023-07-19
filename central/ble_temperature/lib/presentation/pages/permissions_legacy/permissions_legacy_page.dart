@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../generated/l10n.dart';
 import '../../../config/app_routes.dart';
+import '../../../config/app_styles.dart';
 import '../../../globals.dart';
 import '../../bloc/permissions_legacy/permissions_legacy_cubit.dart';
 import '../widgets/permission_status_widget.dart';
@@ -100,28 +101,33 @@ class _PermissionsLegacyPageState extends State<PermissionsLegacyPage>
         title: Text(S.of(context).screenPermissionsTitle),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PermissionStatusWidget(
-                title: S.of(context).screenPermissionLegacyLocationTitle,
-                body: S.of(context).screenPermissionLegacyLocationBody,
-                status: statusLocationWhenInUse,
-                action: S.of(context).screenPermissionsRequestPermission,
-                onPressed: () {
-                  context.read<PermissionsLegacyCubit>().requestLocation();
-                }),
-            ServiceStatusWidget(
-                title: S.of(context).screenPermissionLegacyLocationServiceTitle,
-                body: S.of(context).screenPermissionLegacyLocationServiceBody,
-                status: serviceLocationEnabled,
-                action: S.of(context).screenPermissionLegacyLocationServiceOpen,
-                onPressed: () {
-                  context
-                      .read<PermissionsLegacyCubit>()
-                      .requestLocationService();
-                }),
-          ],
+        child: Padding(
+          padding: AppStyles.edgeInsetsSmall,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PermissionStatusWidget(
+                  title: S.of(context).screenPermissionLegacyLocationTitle,
+                  body: S.of(context).screenPermissionLegacyLocationBody,
+                  status: statusLocationWhenInUse,
+                  action: S.of(context).screenPermissionsRequestPermission,
+                  onPressed: () {
+                    context.read<PermissionsLegacyCubit>().requestLocation();
+                  }),
+              ServiceStatusWidget(
+                  title:
+                      S.of(context).screenPermissionLegacyLocationServiceTitle,
+                  body: S.of(context).screenPermissionLegacyLocationServiceBody,
+                  status: serviceLocationEnabled,
+                  action:
+                      S.of(context).screenPermissionLegacyLocationServiceOpen,
+                  onPressed: () {
+                    context
+                        .read<PermissionsLegacyCubit>()
+                        .requestLocationService();
+                  }),
+            ],
+          ),
         ),
       ),
     );

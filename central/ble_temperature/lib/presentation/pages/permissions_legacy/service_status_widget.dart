@@ -27,6 +27,7 @@ class ServiceStatusWidget extends StatelessWidget {
   Widget _build(BuildContext context, String title, String body, String action,
       bool status, void Function()? onPressed) {
     return Card(
+      margin: AppStyles.edgeInsetsSmall,
       child: Padding(
         padding: AppStyles.edgeInsetsMedium,
         child: Column(
@@ -57,11 +58,13 @@ class ServiceStatusWidget extends StatelessWidget {
             const Padding(
               padding: AppStyles.edgeInsetsMedium,
             ),
-            OutlinedButton(
-              onPressed: onPressed,
-              child: Text(
-                action,
-              ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton.tonal(
+                  onPressed: onPressed,
+                  child: Text(
+                    action,
+                  )),
             )
           ],
         ),

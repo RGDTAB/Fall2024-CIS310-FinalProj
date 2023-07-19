@@ -29,6 +29,7 @@ class PermissionStatusWidget extends StatelessWidget {
   Widget _buildPermissionEntry(BuildContext context, String title, String body,
       String action, PermissionStatus status, void Function()? onPressed) {
     return Card(
+      margin: AppStyles.edgeInsetsSmall,
       child: Padding(
         padding: AppStyles.edgeInsetsMedium,
         child: Column(
@@ -55,11 +56,13 @@ class PermissionStatusWidget extends StatelessWidget {
               '${S.of(context).screenPermissionStatus} ${_statusToString(context, status)}',
             ),
             const Padding(padding: AppStyles.edgeInsetsMedium),
-            OutlinedButton(
-              onPressed: onPressed,
-              child: Text(
-                action,
-              ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton.tonal(
+                  onPressed: onPressed,
+                  child: Text(
+                    action,
+                  )),
             )
           ],
         ),
