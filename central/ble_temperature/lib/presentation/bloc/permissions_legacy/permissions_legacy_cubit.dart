@@ -12,9 +12,7 @@ class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
 
   PermissionsLegacyCubit({
     required this.permissionsFacade,
-  }) : super(const PermissionsLegacyState.loading()) {
-    update();
-  }
+  }) : super(const PermissionsLegacyState.loading());
 
   Future<void> update() async {
     emit(PermissionsLegacyState.update(
@@ -26,19 +24,27 @@ class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
   }
 
   Future<void> requestLocation() async {
-    state.whenOrNull(update: (_, __) async {
-      var status = await permissionsFacade.requestLocationWhenInUse();
-      if (status == PermissionStatus.permanentlyDenied) {
-        await permissionsFacade.openSystemAppSettings();
-      }
+    switch (state) {
+      case Update():
+        var status = await permissionsFacade.requestLocationWhenInUse();
+        if (status == PermissionStatus.permanentlyDenied) {
+          await permissionsFacade.openSystemAppSettings();
+        }
 
-      update();
-    });
+        await update();
+        break;
+      default:
+        break;
+    }
   }
 
   Future<void> requestLocationService() async {
-    state.whenOrNull(update: (_, __) async {
-      await permissionsFacade.openSystemAppSettings();
-    });
+    switch (state) {
+      case Update():
+        await permissionsFacade.openSystemAppSettings();
+        break;
+      default:
+        break;
+    }
   }
 }

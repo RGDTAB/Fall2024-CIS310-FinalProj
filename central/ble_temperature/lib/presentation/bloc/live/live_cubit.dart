@@ -21,9 +21,9 @@ class LiveCubit extends Cubit<LiveState> {
       {required this.device, required this.ucConnect, required this.ucGetData})
       : super(const LiveState.loading());
 
-  void init() {
-    state.whenOrNull(
-      loading: () async {
+  Future<void> init() async {
+    switch (state) {
+      case Loading():
         final result = await ucConnect(BleConnectParams(id: device.id));
         result.fold((l) => null, (r) {
           _connectionSub = r.listen((event) {
@@ -40,8 +40,10 @@ class LiveCubit extends Cubit<LiveState> {
             }
           });
         });
-      },
-    );
+        break;
+      default:
+        break;
+    }
   }
 
   void _onConnected(DeviceConnectionStateUpdate update) async {
@@ -59,13 +61,17 @@ class LiveCubit extends Cubit<LiveState> {
     });
   }
 
-  void retry() {
-    state.whenOrNull(error: () async {
-      await _valueSub?.cancel();
-      await _connectionSub?.cancel();
-      emit(const LiveState.loading());
-      init();
-    });
+  Future<void> retry() async {
+    switch (state) {
+      case Error():
+        await _valueSub?.cancel();
+        await _connectionSub?.cancel();
+        emit(const LiveState.loading());
+        await init();
+        break;
+      default:
+        break;
+    }
   }
 
   @override

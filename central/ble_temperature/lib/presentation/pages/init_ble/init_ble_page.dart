@@ -17,11 +17,9 @@ class InitBlePage extends StatelessWidget {
       create: (context) => InitBleCubit(bleFacade: getIt())..init(),
       child: BlocListener<InitBleCubit, InitBleState>(
         listener: (context, state) {
-          state.when(update: (state) {
-            if (state == BLEState.ready) {
-              Navigator.of(context).pushReplacementNamed(Routes.scanPage);
-            }
-          });
+          if (state.state == BLEState.ready) {
+            Navigator.of(context).pushReplacementNamed(Routes.scanPage);
+          }
         },
         child: Scaffold(
             body: Center(

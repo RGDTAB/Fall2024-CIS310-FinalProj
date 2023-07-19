@@ -15,41 +15,25 @@ class ScanCubit extends Cubit<ScanState> {
   StreamSubscription<DiscoveredDevice>? _sub;
 
   ScanCubit({required this.ucScan})
-      : super(const ScanState.update(scans: ScanDictionary()));
+      : super(const ScanState(scans: ScanDictionary()));
 
-  void startScan() {
-    state.when(
-      update: (scans) async {
-        final result = await ucScan(BleStartScanParams(name: AppBle.advName));
-        result.fold((l) => null, (r) {
-          _sub = r.listen(_onScan);
-        });
-      },
-    );
+  Future<void> startScan() async {
+    final result = await ucScan(BleStartScanParams(name: AppBle.advName));
+    result.fold((l) => null, (r) {
+      _sub = r.listen(_onScan);
+    });
   }
 
   void _onScan(DiscoveredDevice d) {
-    state.when(
-      update: (scans) {
-        emit(ScanState.update(scans: scans.addItem(d)));
-      },
-    );
+    emit(ScanState(scans: state.scans.addItem(d)));
   }
 
-  void stopScan() {
-    state.when(
-      update: (scans) async {
-        await _sub?.cancel();
-      },
-    );
+  Future<void> stopScan() async {
+    await _sub?.cancel();
   }
 
   void refresh() {
-    state.when(
-      update: (scans) async {
-        emit(const ScanState.update(scans: ScanDictionary()));
-      },
-    );
+    emit(const ScanState(scans: ScanDictionary()));
   }
 
   @override

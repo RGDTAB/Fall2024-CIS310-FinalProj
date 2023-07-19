@@ -1,11 +1,11 @@
 part of 'permissions_cubit.dart';
 
 @freezed
-class PermissionsState with _$PermissionsState {
-  const factory PermissionsState.loading() = _Loading;
+sealed class PermissionsState with _$PermissionsState {
+  const factory PermissionsState.loading() = Loading;
 
   const factory PermissionsState.update({
     required PermissionStatus statusScan,
     required PermissionStatus statusConnect,
-  }) = _Update;
+  }) = Update;
 }

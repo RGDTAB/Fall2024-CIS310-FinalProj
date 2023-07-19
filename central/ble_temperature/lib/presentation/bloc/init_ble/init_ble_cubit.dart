@@ -12,11 +12,11 @@ class InitBleCubit extends Cubit<InitBleState> {
   StreamSubscription<BLEState>? _sub;
 
   InitBleCubit({required this.bleFacade})
-      : super(const InitBleState.update(state: BLEState.unknown));
+      : super(const InitBleState(state: BLEState.unknown));
 
   void init() async {
     _sub = bleFacade.bleStateStream().listen((event) async {
-      emit(InitBleState.update(state: event));
+      emit(InitBleState(state: event));
     });
   }
 

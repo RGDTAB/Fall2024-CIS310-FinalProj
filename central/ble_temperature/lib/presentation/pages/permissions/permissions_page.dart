@@ -17,7 +17,8 @@ class PermissionsPage extends StatefulWidget {
 
 class _PermissionsPageState extends State<PermissionsPage>
     with WidgetsBindingObserver {
-  final _permissionsCubit = PermissionsCubit(permissionsFacade: getIt());
+  final _permissionsCubit = PermissionsCubit(permissionsFacade: getIt())
+    ..update();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -53,60 +54,66 @@ class _PermissionsPageState extends State<PermissionsPage>
         create: (context) => _permissionsCubit,
         child: BlocConsumer<PermissionsCubit, PermissionsState>(
             listener: (context, state) {
-          state.whenOrNull(
-            update: (statusScan, statusConnect) {
-              if (statusScan == PermissionStatus.granted &&
-                  statusConnect == PermissionStatus.granted) {
-                Navigator.of(context).pushReplacementNamed(Routes.bleInitPage);
+              switch (state) {
+                case Update update:
+                  if (update.statusScan == PermissionStatus.granted &&
+                      update.statusConnect == PermissionStatus.granted) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(Routes.bleInitPage);
+                  }
+                default:
+                  break;
               }
             },
-          );
-        }, builder: (context, state) {
-          return state.when(loading: () {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text(S.of(context).screenPermissionsTitle),
-                ),
-                body: _buildLoadingState());
-          }, update: (statusScan, statusConnect) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text(S.of(context).screenPermissionsTitle),
-                ),
-                body: _buildUpdateState(context, statusScan, statusConnect));
-          });
-        }));
+            builder: (context, state) => switch (state) {
+                  Loading() => _buildLoadingState(context),
+                  Update(
+                    statusScan: final statusScan,
+                    statusConnect: final statusConnect
+                  ) =>
+                    _buildUpdateState(context, statusScan, statusConnect),
+                }));
   }
 
-  Widget _buildLoadingState() {
-    return const Center(
-      child: CircularProgressIndicator(),
+  Widget _buildLoadingState(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).screenPermissionsTitle),
+      ),
+      body: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
   Widget _buildUpdateState(BuildContext context, PermissionStatus statusScan,
       PermissionStatus statusConnect) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PermissionStatusWidget(
-              title: S.of(context).screenPermissionsScanTitle,
-              body: S.of(context).screenPermissionsScanBody,
-              status: statusScan,
-              action: S.of(context).screenPermissionsRequestPermission,
-              onPressed: () {
-                context.read<PermissionsCubit>().requestScan();
-              }),
-          PermissionStatusWidget(
-              title: S.of(context).screenPermissionsConnectTitle,
-              body: S.of(context).screenPermissionsConnectBody,
-              status: statusConnect,
-              action: S.of(context).screenPermissionsRequestPermission,
-              onPressed: () {
-                context.read<PermissionsCubit>().requestConnect();
-              }),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).screenPermissionsTitle),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PermissionStatusWidget(
+                title: S.of(context).screenPermissionsScanTitle,
+                body: S.of(context).screenPermissionsScanBody,
+                status: statusScan,
+                action: S.of(context).screenPermissionsRequestPermission,
+                onPressed: () {
+                  context.read<PermissionsCubit>().requestScan();
+                }),
+            PermissionStatusWidget(
+                title: S.of(context).screenPermissionsConnectTitle,
+                body: S.of(context).screenPermissionsConnectBody,
+                status: statusConnect,
+                action: S.of(context).screenPermissionsRequestPermission,
+                onPressed: () {
+                  context.read<PermissionsCubit>().requestConnect();
+                }),
+          ],
+        ),
       ),
     );
   }

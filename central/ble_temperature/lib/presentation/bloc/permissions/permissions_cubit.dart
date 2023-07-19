@@ -12,9 +12,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   PermissionsCubit({
     required this.permissionsFacade,
-  }) : super(const PermissionsState.loading()) {
-    update();
-  }
+  }) : super(const PermissionsState.loading());
 
   Future<void> update() async {
     emit(PermissionsState.update(
@@ -24,24 +22,30 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   Future<void> requestScan() async {
-    state.whenOrNull(update: (_, __) async {
-      var status = await permissionsFacade.requestBluetoothScan();
-      if (status == PermissionStatus.permanentlyDenied) {
-        await permissionsFacade.openSystemAppSettings();
-      }
-
-      update();
-    });
+    switch (state) {
+      case Update():
+        var status = await permissionsFacade.requestBluetoothScan();
+        if (status == PermissionStatus.permanentlyDenied) {
+          await permissionsFacade.openSystemAppSettings();
+        }
+        await update();
+        break;
+      default:
+        break;
+    }
   }
 
   Future<void> requestConnect() async {
-    state.whenOrNull(update: (_, __) async {
-      var status = await permissionsFacade.requestBluetoothConnect();
-      if (status == PermissionStatus.permanentlyDenied) {
-        await permissionsFacade.openSystemAppSettings();
-      }
-
-      update();
-    });
+    switch (state) {
+      case Update():
+        var status = await permissionsFacade.requestBluetoothConnect();
+        if (status == PermissionStatus.permanentlyDenied) {
+          await permissionsFacade.openSystemAppSettings();
+        }
+        await update();
+        break;
+      default:
+        break;
+    }
   }
 }

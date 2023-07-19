@@ -1,10 +1,10 @@
-import 'package:ble_temperature/presentation/pages/live/live_page_params.dart';
 import 'package:flutter/material.dart';
 
 import '../presentation/pages/about/about_page.dart';
 import '../presentation/pages/error/error_page.dart';
 import '../presentation/pages/init_ble/init_ble_page.dart';
 import '../presentation/pages/live/live_page.dart';
+import '../presentation/pages/live/live_page_params.dart';
 import '../presentation/pages/permissions/permissions_page.dart';
 import '../presentation/pages/permissions_legacy/permissions_legacy_page.dart';
 import '../presentation/pages/scan/scan_page.dart';

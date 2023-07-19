@@ -1,4 +1,4 @@
-import 'package:ble_temperature/presentation/pages/live/live_page_params.dart';
+import '../live/live_page_params.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,51 +16,47 @@ class ScanPage extends StatelessWidget {
       create: (context) => ScanCubit(ucScan: getIt())..startScan(),
       child: BlocBuilder<ScanCubit, ScanState>(
         builder: (BuildContext context, state) {
-          return state.when(
-            update: (scans) {
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text(S.of(context).scanPageTitle),
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(Routes.aboutPage);
-                        },
-                        icon: const Icon(Icons.info))
-                  ],
-                ),
-                body: RefreshIndicator(
-                  onRefresh: () {
-                    context.read<ScanCubit>().refresh();
-                    return Future.value();
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(S.of(context).scanPageTitle),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.aboutPage);
+                    },
+                    icon: const Icon(Icons.info))
+              ],
+            ),
+            body: RefreshIndicator(
+              onRefresh: () {
+                context.read<ScanCubit>().refresh();
+                return Future.value();
+              },
+              child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    final scan = state.scans.items.values.toList()[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        child: Text('${scan.rssi}'),
+                      ),
+                      title: Text(scan.name),
+                      subtitle: Text(scan.id),
+                      onTap: () {
+                        context.read<ScanCubit>().stopScan();
+                        Navigator.of(context)
+                            .pushNamed(Routes.livePage,
+                                arguments: LivePageParams(device: scan))
+                            .then((value) {
+                          context.read<ScanCubit>().startScan();
+                        });
+                      },
+                    );
                   },
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        final scan = scans.items.values.elementAt(index);
-                        return ListTile(
-                          leading: CircleAvatar(
-                            child: Text('${scan.rssi}'),
-                          ),
-                          title: Text(scan.name),
-                          subtitle: Text(scan.id),
-                          onTap: () {
-                            context.read<ScanCubit>().stopScan();
-                            Navigator.of(context)
-                                .pushNamed(Routes.livePage,
-                                    arguments: LivePageParams(device: scan))
-                                .then((value) {
-                              context.read<ScanCubit>().startScan();
-                            });
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return const Divider();
-                      },
-                      itemCount: scans.items.length),
-                ),
-              );
-            },
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                  itemCount: state.scans.items.length),
+            ),
           );
         },
       ),

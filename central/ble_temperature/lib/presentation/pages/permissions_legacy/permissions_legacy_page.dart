@@ -19,7 +19,7 @@ class PermissionsLegacyPage extends StatefulWidget {
 class _PermissionsLegacyPageState extends State<PermissionsLegacyPage>
     with WidgetsBindingObserver {
   final _permissionsLegacyCubit =
-      PermissionsLegacyCubit(permissionsFacade: getIt());
+      PermissionsLegacyCubit(permissionsFacade: getIt())..update();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -55,35 +55,38 @@ class _PermissionsLegacyPageState extends State<PermissionsLegacyPage>
         create: (context) => _permissionsLegacyCubit,
         child: BlocConsumer<PermissionsLegacyCubit, PermissionsLegacyState>(
             listener: (context, state) {
-          state.whenOrNull(
-            update: (serviceLocationEnabled, statusLocationWhenInUse) {
-              if (serviceLocationEnabled &&
-                  statusLocationWhenInUse == PermissionStatus.granted) {
-                Navigator.of(context).pushReplacementNamed(Routes.bleInitPage);
+              switch (state) {
+                case Update update:
+                  if (update.serviceLocationEnabled &&
+                      update.statusLocationWhenInUse ==
+                          PermissionStatus.granted) {
+                    Navigator.of(context)
+                        .pushReplacementNamed(Routes.bleInitPage);
+                  }
+                  break;
+                default:
+                  break;
               }
             },
-          );
-        }, builder: (context, state) {
-          return state.when(loading: () {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text(S.of(context).screenPermissionsTitle),
-                ),
-                body: _buildLoadingState());
-          }, update: (serviceLocationEnabled, statusLocationWhenInUse) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text(S.of(context).screenPermissionsTitle),
-                ),
-                body: _buildUpdateState(
-                    context, serviceLocationEnabled, statusLocationWhenInUse));
-          });
-        }));
+            builder: (context, state) => switch (state) {
+                  Loading() => _buildLoadingState(context),
+                  Update(
+                    serviceLocationEnabled: final serviceLocationEnabled,
+                    statusLocationWhenInUse: final statusLocationWhenInUse
+                  ) =>
+                    _buildUpdateState(context, serviceLocationEnabled,
+                        statusLocationWhenInUse),
+                }));
   }
 
-  Widget _buildLoadingState() {
-    return const Center(
-      child: CircularProgressIndicator(),
+  Widget _buildLoadingState(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).screenPermissionsTitle),
+      ),
+      body: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
@@ -92,27 +95,34 @@ class _PermissionsLegacyPageState extends State<PermissionsLegacyPage>
     bool serviceLocationEnabled,
     PermissionStatus statusLocationWhenInUse,
   ) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PermissionStatusWidget(
-              title: S.of(context).screenPermissionLegacyLocationTitle,
-              body: S.of(context).screenPermissionLegacyLocationBody,
-              status: statusLocationWhenInUse,
-              action: S.of(context).screenPermissionsRequestPermission,
-              onPressed: () {
-                context.read<PermissionsLegacyCubit>().requestLocation();
-              }),
-          ServiceStatusWidget(
-              title: S.of(context).screenPermissionLegacyLocationServiceTitle,
-              body: S.of(context).screenPermissionLegacyLocationServiceBody,
-              status: serviceLocationEnabled,
-              action: S.of(context).screenPermissionLegacyLocationServiceOpen,
-              onPressed: () {
-                context.read<PermissionsLegacyCubit>().requestLocationService();
-              }),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).screenPermissionsTitle),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PermissionStatusWidget(
+                title: S.of(context).screenPermissionLegacyLocationTitle,
+                body: S.of(context).screenPermissionLegacyLocationBody,
+                status: statusLocationWhenInUse,
+                action: S.of(context).screenPermissionsRequestPermission,
+                onPressed: () {
+                  context.read<PermissionsLegacyCubit>().requestLocation();
+                }),
+            ServiceStatusWidget(
+                title: S.of(context).screenPermissionLegacyLocationServiceTitle,
+                body: S.of(context).screenPermissionLegacyLocationServiceBody,
+                status: serviceLocationEnabled,
+                action: S.of(context).screenPermissionLegacyLocationServiceOpen,
+                onPressed: () {
+                  context
+                      .read<PermissionsLegacyCubit>()
+                      .requestLocationService();
+                }),
+          ],
+        ),
       ),
     );
   }
