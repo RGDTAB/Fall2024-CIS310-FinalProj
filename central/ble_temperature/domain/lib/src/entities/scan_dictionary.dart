@@ -1,9 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../domain.dart';
 
-class ScanDictionary {
-  final Map<String, DiscoveredDevice> _items;
+part 'scan_dictionary.freezed.dart';
 
-  Map<String, DiscoveredDevice> get items => Map.unmodifiable(_items);
-
-  const ScanDictionary([this._items = const {}]);
+@freezed
+class ScanDictionary with _$ScanDictionary {
+  const factory ScanDictionary(
+      [@Default({}) Map<String, DiscoveredDevice> items]) = _ScanDictionary;
 }

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:domain/domain.dart';
 
-class BleFacadeFake implements BleFacade {
+class BleFake implements BleFacade {
   @override
   Stream<DeviceConnectionStateUpdate> get deviceConnectionStateStream =>
       Stream.fromIterable([

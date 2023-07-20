@@ -11,7 +11,7 @@ class InjectionContainer {
         // REGISTER REPOS HERE:
 
         // REGISTER FACADES HERE:
-        getIt.registerLazySingleton<BleFacade>(() => BleFacadeFake());
+        getIt.registerLazySingleton<BleFacade>(() => BleFake());
         getIt.registerLazySingleton<AppInfoFacade>(() => AppInfoImpl());
         getIt.registerLazySingleton<DeviceInfoFacade>(() => DeviceInfoImpl());
 
@@ -28,7 +28,7 @@ class InjectionContainer {
         // REGISTER FACADES HERE:
         getIt.registerLazySingleton<PermissionsFacade>(
             () => PermissionsFacadeImpl());
-        getIt.registerLazySingleton<BleFacade>(() => BleFacadeImpl());
+        getIt.registerLazySingleton<BleFacade>(() => BleImpl());
         getIt.registerLazySingleton<AppInfoFacade>(() => AppInfoImpl());
         getIt.registerLazySingleton<DeviceInfoFacade>(() => DeviceInfoImpl());
 

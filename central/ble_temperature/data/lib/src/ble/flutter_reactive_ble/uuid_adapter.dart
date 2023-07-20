@@ -1,11 +1,15 @@
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart' as pkg;
 
-class UUIDAdapter {
-  String fromExt(pkg.Uuid uuid) {
-    return uuid.toString();
+import '../../core/common_interfaces.dart';
+
+class UUIDAdapter implements Adaptable<pkg.Uuid, String> {
+  @override
+  String from(pkg.Uuid obj) {
+    return obj.toString();
   }
 
-  pkg.Uuid toExt(String uuid) {
-    return pkg.Uuid.parse(uuid);
+  @override
+  pkg.Uuid to(String obj) {
+    return pkg.Uuid.parse(obj);
   }
 }

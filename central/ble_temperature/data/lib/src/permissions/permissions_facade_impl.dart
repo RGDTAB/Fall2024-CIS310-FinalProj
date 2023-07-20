@@ -13,14 +13,14 @@ class PermissionsFacadeImpl implements PermissionsFacade {
   @override
   Future<PermissionStatus> getBluetoothStatus() async {
     handler.PermissionStatus status = await handler.Permission.bluetooth.status;
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
   Future<PermissionStatus> requestBluetooth() async {
     handler.PermissionStatus status =
         await handler.Permission.bluetooth.request();
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
@@ -32,14 +32,14 @@ class PermissionsFacadeImpl implements PermissionsFacade {
   Future<PermissionStatus> getLocationWhenInUseStatus() async {
     handler.PermissionStatus status =
         await handler.Permission.locationWhenInUse.status;
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
   Future<PermissionStatus> requestLocationWhenInUse() async {
     handler.PermissionStatus status =
         await handler.Permission.locationWhenInUse.request();
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
@@ -56,14 +56,14 @@ class PermissionsFacadeImpl implements PermissionsFacade {
   Future<PermissionStatus> getBluetoothScanStatus() async {
     handler.PermissionStatus status =
         await handler.Permission.bluetoothScan.status;
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
   Future<PermissionStatus> requestBluetoothScan() async {
     handler.PermissionStatus status =
         await handler.Permission.bluetoothScan.request();
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
@@ -75,14 +75,14 @@ class PermissionsFacadeImpl implements PermissionsFacade {
   Future<PermissionStatus> getBluetoothConnectStatus() async {
     handler.PermissionStatus status =
         await handler.Permission.bluetoothConnect.status;
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override
   Future<PermissionStatus> requestBluetoothConnect() async {
     handler.PermissionStatus status =
         await handler.Permission.bluetoothConnect.request();
-    return PermissionStatusAdapter().fromExt(status);
+    return PermissionStatusAdapter().from(status);
   }
 
   @override

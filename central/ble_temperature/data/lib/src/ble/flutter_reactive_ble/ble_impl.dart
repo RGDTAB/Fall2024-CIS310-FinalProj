@@ -6,7 +6,7 @@ import 'device_connection_state_adapter.dart';
 import 'scan_mode_adapter.dart';
 import 'uuid_adapter.dart';
 
-class BleFacadeImpl implements BleFacade {
+class BleImpl implements BleFacade {
   final ble.FlutterReactiveBle _ble = ble.FlutterReactiveBle();
 
   @override
@@ -14,23 +14,23 @@ class BleFacadeImpl implements BleFacade {
       _ble.connectedDeviceStream.map((event) => DeviceConnectionStateUpdate(
             deviceId: event.deviceId,
             deviceConnectionState:
-                DeviceConnectionStateAdapter().fromExt(event.connectionState),
+                DeviceConnectionStateAdapter().from(event.connectionState),
             error: event.failure,
           ));
 
   @override
   Stream<List<int>> subscribeToCharacteristic(Characteristic characteristic) {
     return _ble.subscribeToCharacteristic(ble.QualifiedCharacteristic(
-        characteristicId: UUIDAdapter().toExt(characteristic.characteristicId),
-        serviceId: UUIDAdapter().toExt(characteristic.serviceId),
+        characteristicId: UUIDAdapter().to(characteristic.characteristicId),
+        serviceId: UUIDAdapter().to(characteristic.serviceId),
         deviceId: characteristic.deviceId));
   }
 
   @override
   Future<List<int>> readCharacteristic(Characteristic characteristic) async {
     return await _ble.readCharacteristic(ble.QualifiedCharacteristic(
-        characteristicId: UUIDAdapter().toExt(characteristic.characteristicId),
-        serviceId: UUIDAdapter().toExt(characteristic.serviceId),
+        characteristicId: UUIDAdapter().to(characteristic.characteristicId),
+        serviceId: UUIDAdapter().to(characteristic.serviceId),
         deviceId: characteristic.deviceId));
   }
 
@@ -39,9 +39,8 @@ class BleFacadeImpl implements BleFacade {
       {required List<int> value}) async {
     await _ble.writeCharacteristicWithResponse(
       ble.QualifiedCharacteristic(
-          characteristicId:
-              UUIDAdapter().toExt(characteristic.characteristicId),
-          serviceId: UUIDAdapter().toExt(characteristic.serviceId),
+          characteristicId: UUIDAdapter().to(characteristic.characteristicId),
+          serviceId: UUIDAdapter().to(characteristic.serviceId),
           deviceId: characteristic.deviceId),
       value: value,
     );
@@ -52,9 +51,8 @@ class BleFacadeImpl implements BleFacade {
       {required List<int> value}) async {
     await _ble.writeCharacteristicWithoutResponse(
       ble.QualifiedCharacteristic(
-          characteristicId:
-              UUIDAdapter().toExt(characteristic.characteristicId),
-          serviceId: UUIDAdapter().toExt(characteristic.serviceId),
+          characteristicId: UUIDAdapter().to(characteristic.characteristicId),
+          serviceId: UUIDAdapter().to(characteristic.serviceId),
           deviceId: characteristic.deviceId),
       value: value,
     );
@@ -88,9 +86,8 @@ class BleFacadeImpl implements BleFacade {
   }) {
     return _ble
         .scanForDevices(
-          withServices:
-              withServices.map((e) => UUIDAdapter().toExt(e)).toList(),
-          scanMode: ScanModeAdapter().toExt(scanMode),
+          withServices: withServices.map((e) => UUIDAdapter().to(e)).toList(),
+          scanMode: ScanModeAdapter().to(scanMode),
           requireLocationServicesEnabled: requireLocationServicesEnabled,
         )
         .map((event) => DiscoveredDevice(
@@ -102,19 +99,18 @@ class BleFacadeImpl implements BleFacade {
             },
             manufacturerData: event.manufacturerData,
             rssi: event.rssi,
-            serviceUuids: event.serviceUuids
-                .map((e) => UUIDAdapter().fromExt(e))
-                .toList()));
+            serviceUuids:
+                event.serviceUuids.map((e) => UUIDAdapter().from(e)).toList()));
   }
 
   @override
   Stream<BLEState> bleStateStream() {
-    return _ble.statusStream.map((event) => BLEStateAdapter().fromExt(event));
+    return _ble.statusStream.map((event) => BLEStateAdapter().from(event));
   }
 
   @override
   BLEState bleState() {
-    return BLEStateAdapter().fromExt(_ble.status);
+    return BLEStateAdapter().from(_ble.status);
   }
 
   @override
@@ -128,24 +124,22 @@ class BleFacadeImpl implements BleFacade {
     return _ble
         .connectToAdvertisingDevice(
             id: deviceId,
-            withServices:
-                withServices.map((e) => UUIDAdapter().toExt(e)).toList(),
+            withServices: withServices.map((e) => UUIDAdapter().to(e)).toList(),
             prescanDuration: prescanDuration,
             servicesWithCharacteristicsToDiscover:
                 servicesWithCharacteristicsToDiscover != null
                     ? {
                         for (var e
                             in servicesWithCharacteristicsToDiscover.entries)
-                          UUIDAdapter().toExt(e.key): e.value
-                              .map((e) => UUIDAdapter().toExt(e))
-                              .toList()
+                          UUIDAdapter().to(e.key):
+                              e.value.map((e) => UUIDAdapter().to(e)).toList()
                       }
                     : null,
             connectionTimeout: connectionTimeout)
         .map((event) => DeviceConnectionStateUpdate(
               deviceId: event.deviceId,
               deviceConnectionState:
-                  DeviceConnectionStateAdapter().fromExt(event.connectionState),
+                  DeviceConnectionStateAdapter().from(event.connectionState),
               error: event.failure,
             ));
   }
@@ -164,8 +158,8 @@ class BleFacadeImpl implements BleFacade {
                   ? {
                       for (var e
                           in servicesWithCharacteristicsToDiscover.entries)
-                        UUIDAdapter().toExt(e.key):
-                            e.value.map((e) => UUIDAdapter().toExt(e)).toList()
+                        UUIDAdapter().to(e.key):
+                            e.value.map((e) => UUIDAdapter().to(e)).toList()
                     }
                   : null,
           connectionTimeout: connectionTimeout,
@@ -173,7 +167,7 @@ class BleFacadeImpl implements BleFacade {
         .map((event) => DeviceConnectionStateUpdate(
               deviceId: event.deviceId,
               deviceConnectionState:
-                  DeviceConnectionStateAdapter().fromExt(event.connectionState),
+                  DeviceConnectionStateAdapter().from(event.connectionState),
               error: event.failure,
             ));
   }

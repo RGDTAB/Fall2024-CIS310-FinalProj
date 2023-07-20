@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../core/use_case/common_interfaces.dart';
 import '../../core/use_case/use_case.dart';
 import '../../facades/device_info/device_info_facade.dart';
 import '../../facades/permissions/permission_status.dart';
