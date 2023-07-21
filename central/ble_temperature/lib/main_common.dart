@@ -22,7 +22,7 @@ Future<void> mainCommon() async {
 
   if (appFlavor != AppFlavor.sim) {
     final result = await getIt<PermissionsCheck>().call(const NoParams());
-    initialRoute = result.fold((l) => ErrorPage.routeName, (r) {
+    initialRoute = result.fold((l) => Routes.errorPage, (r) {
       if (r.hasAllPermissions) {
         return Routes.bleInitPage;
       } else if (r.isLegacy ?? false) {

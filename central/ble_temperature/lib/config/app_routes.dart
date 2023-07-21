@@ -16,6 +16,7 @@ class Routes {
   static const String scanPage = 'scan_page';
   static const String livePage = 'live_page';
   static const String aboutPage = 'about_page';
+  static const String errorPage = 'error_page';
 }
 
 class RouteGenerator {
