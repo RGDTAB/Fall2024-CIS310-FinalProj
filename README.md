@@ -21,6 +21,10 @@ https://github.com/d-wolf/flutter_ble_arduino_temperature/assets/3867384/bda0d26
 
 The app has two build variants `prod` and `sim`. The `prod` variant connects to a real physical device whereas the `sim` variant just emulates one. So to run the app you dont really need a physical device at all. Just run the `sim` variant. To do so call `flutter run --release --flavor sim -t lib/main_sim.dart`. For the prod variant call `flutter run --release --flavor prod -t lib/main_prod.dart`.
 
+## Run CI
+* `git tag v<major>.<minor>.<version>`
+* `git push origin --tags`
+
 ## Sources
 * https://docs.flutter.dev/get-started/install
 * https://melos.invertase.dev/getting-started
