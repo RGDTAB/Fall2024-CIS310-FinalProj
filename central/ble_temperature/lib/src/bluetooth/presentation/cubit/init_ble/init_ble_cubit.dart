@@ -8,14 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'init_ble_state.dart';
 
 class InitBleCubit extends Cubit<InitBleState> {
-  final ListenBleState _listenBleState;
-  StreamSubscription<BLEState>? _sub;
-
   InitBleCubit({required ListenBleState listenBleState})
       : _listenBleState = listenBleState,
         super(const InitBleState(state: BLEState.unknown));
+  final ListenBleState _listenBleState;
+  StreamSubscription<BLEState>? _sub;
 
-  void init() async {
+  Future<void> init() async {
     _sub = _listenBleState().listen((event) async {
       emit(InitBleState(state: event));
     });

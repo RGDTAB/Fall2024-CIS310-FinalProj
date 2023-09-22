@@ -12,6 +12,7 @@
     "screenPermissionsPermanentlyDenied": "permanently denied",
     "screenPermissionsRequestPermission": "Grant permission",
     "screenPermissionsRestricted": "restricted",
+    "screenPermissionsProvisional": "provisional",
     "screenPermissionsOpenSettings": "Open app settings",
     "screenPermissionsContinue": "continue",
 
@@ -22,6 +23,8 @@
     "screenPermissionLegacyLocationServiceBody": "In addition to location permission, location service must be enabled to find and connect your Bluetooth devices.",
     "screenPermissionLegacyLocationServiceInactiv": "inactive",
     "screenPermissionLegacyLocationServiceOpen": "Manage location service",
+
+    "screenPermissionError": "An unexpected error has occurred. Please restart the app.",
    
     "bleInitWaiting": "Initializing Bluetooth. Please make sure you have turned on Bluetooth on your mobile device.",
 

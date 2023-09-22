@@ -12,9 +12,14 @@ class PermissionsStateLoading extends PermissionsState {
 }
 
 class PermissionsStateUpdate extends PermissionsState {
+  const PermissionsStateUpdate({
+    required this.statusScan,
+    required this.statusConnect,
+  });
   final PermissionStatus statusScan;
   final PermissionStatus statusConnect;
+}
 
-  const PermissionsStateUpdate(
-      {required this.statusScan, required this.statusConnect});
+class PermissionsStateError extends PermissionsState {
+  const PermissionsStateError();
 }

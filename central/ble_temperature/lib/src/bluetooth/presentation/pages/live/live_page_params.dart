@@ -1,11 +1,11 @@
-import 'package:ble_temperature/src/bluetooth/domain/entities/discovered_device.dart';
+import 'package:ble_temperature/src/bluetooth/domain/value_objects/discovered_device.dart';
 import 'package:equatable/equatable.dart';
 
 class LivePageParams extends Equatable {
-  final DiscoveredDevice device;
   const LivePageParams({
     required this.device,
   });
+  final DiscoveredDevice device;
 
   @override
   List<Object?> get props => [device];

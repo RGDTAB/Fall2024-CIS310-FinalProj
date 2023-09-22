@@ -1,4 +1,5 @@
-import 'package:ble_temperature/core/globals.dart';
+import 'package:ble_temperature/core/app_globals.dart';
+import 'package:ble_temperature/core/enums/app_flavor.dart';
 import 'package:ble_temperature/src/about/data/datasources/app_info_impl.dart';
 import 'package:ble_temperature/src/about/data/repositories/app_info_repository_impl.dart';
 import 'package:ble_temperature/src/about/domain/repositories/app_info_repository.dart';
@@ -27,51 +28,59 @@ import 'package:ble_temperature/src/permissions/domain/usecases/request_bluetoot
 import 'package:ble_temperature/src/permissions/presentation/cubit/permissions/permissions_cubit.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
-import '../app_flavor.dart';
-
 class InjectionContainer {
   Future<void> init(AppFlavor flavor) async {
     // Permission
-    sl.registerFactory(() => PermissionsCubit(
+    sl
+      ..registerFactory(
+        () => PermissionsCubit(
           getBluetoothScanStatus: sl(),
           getBluetoothConnectStatus: sl(),
           requestBluetoothConnect: sl(),
           requestBluetoothScan: sl(),
-        ));
+        ),
+      )
+      ..registerLazySingleton(() => GetPermissionPlatformInfo(sl()))
+      ..registerLazySingleton(() => GetBluetoothScanStatus(sl()))
+      ..registerLazySingleton(() => GetBluetoothConnectStatus(sl()))
+      ..registerLazySingleton(() => RequestBluetoothConnect(sl()))
+      ..registerLazySingleton(() => RequestBluetoothScan(sl()))
+      ..registerLazySingleton<PermissionsRepository>(
+        () => PermissionsRepositoryImpl(sl(), sl()),
+      )
+      ..registerLazySingleton<PermissionsLocalDataSource>(
+        PermissionsLocaDataSourceImpl.new,
+      )
+      ..registerLazySingleton<DeviceInfoLocalDataSource>(
+        DeviceInfoLocalDataSourceImpl.new,
+      )
 
-    sl.registerLazySingleton(() => GetPermissionPlatformInfo(sl()));
-    sl.registerLazySingleton(() => GetBluetoothScanStatus(sl()));
-    sl.registerLazySingleton(() => GetBluetoothConnectStatus(sl()));
-    sl.registerLazySingleton(() => RequestBluetoothConnect(sl()));
-    sl.registerLazySingleton(() => RequestBluetoothScan(sl()));
-    sl.registerLazySingleton<PermissionsRepository>(
-        () => PermissionsRepositoryImpl(sl(), sl()));
-    sl.registerLazySingleton<PermissionsLocalDataSource>(
-        () => PermissionsLocaDataSourceImpl());
-    sl.registerLazySingleton<DeviceInfoLocalDataSource>(
-        () => DeviceInfoLocalDataSourceImpl());
+      // BLE
+      ..registerFactory(() => InitBleCubit(listenBleState: sl()))
+      ..registerFactory(() => ScanCubit(startScan: sl()))
+      ..registerFactory(() => LiveCubit(connect: sl(), listenData: sl()))
+      ..registerLazySingleton(() => ListenBleState(sl()))
+      ..registerLazySingleton(() => StartScan(sl()))
+      ..registerLazySingleton(() => Connect(sl()))
+      ..registerLazySingleton(() => ListenData(sl()))
+      ..registerLazySingleton<BleRepository>(
+        () => flavor == AppFlavor.sim
+            ? BleRepositoryFake()
+            : BleRepositoryImpl(sl()),
+      )
+      ..registerLazySingleton<BleRemoteDataSource>(
+        () => BleRemoteDataSourceImpl(sl()),
+      )
+      ..registerLazySingleton<FlutterReactiveBle>(FlutterReactiveBle.new)
 
-    // BLE
-    sl.registerFactory(() => InitBleCubit(listenBleState: sl()));
-    sl.registerFactory(() => ScanCubit(startScan: sl()));
-    sl.registerFactory(() => LiveCubit(connect: sl(), listenData: sl()));
-    sl.registerLazySingleton(() => ListenBleState(sl()));
-    sl.registerLazySingleton(() => StartScan(sl()));
-    sl.registerLazySingleton(() => Connect(sl()));
-    sl.registerLazySingleton(() => ListenData(sl()));
-    sl.registerLazySingleton<BleRepository>(() => flavor == AppFlavor.sim
-        ? BleRepositoryFake()
-        : BleRepositoryImpl(sl()));
-    sl.registerLazySingleton<BleRemoteDataSource>(
-        () => BleRemoteDataSourceImpl(sl()));
-    sl.registerLazySingleton<FlutterReactiveBle>(() => FlutterReactiveBle());
-
-    // About
-    sl.registerFactory(() => AboutCubit(loadAppInfo: sl()));
-    sl.registerLazySingleton(() => LoadAppInfo(sl()));
-    sl.registerLazySingleton<AppInfoRepository>(
-        () => AppInfoRepositoryImpl(sl()));
-    sl.registerLazySingleton<AppInfoLocalDataSource>(
-        () => AppInfoLocalDataSourceImpl());
+      // About
+      ..registerFactory(() => AboutCubit(loadAppInfo: sl()))
+      ..registerLazySingleton(() => LoadAppInfo(sl()))
+      ..registerLazySingleton<AppInfoRepository>(
+        () => AppInfoRepositoryImpl(sl()),
+      )
+      ..registerLazySingleton(
+        AppInfoLocalDataSourceImpl.new,
+      );
   }
 }

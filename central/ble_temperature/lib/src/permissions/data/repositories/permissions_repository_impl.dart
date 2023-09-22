@@ -10,11 +10,12 @@ import 'package:ble_temperature/src/permissions/domain/repositories/permissions_
 import 'package:dartz/dartz.dart';
 
 class PermissionsRepositoryImpl implements PermissionsRepository {
+  PermissionsRepositoryImpl(
+    this._permssionsDataSource,
+    this._deviceInfoDataSource,
+  );
   final PermissionsLocalDataSource _permssionsDataSource;
   final DeviceInfoLocalDataSource _deviceInfoDataSource;
-
-  PermissionsRepositoryImpl(
-      this._permssionsDataSource, this._deviceInfoDataSource);
 
   @override
   ResultFuture<PermissionStatus> getBluetoothConnectStatus() async {

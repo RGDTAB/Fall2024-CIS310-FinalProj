@@ -1,5 +1,5 @@
-import 'package:ble_temperature/src/bluetooth/domain/entities/discovered_device.dart';
-import 'package:ble_temperature/src/bluetooth/domain/entities/scan_dictionary.dart';
+import 'package:ble_temperature/src/bluetooth/domain/value_objects/discovered_device.dart';
+import 'package:ble_temperature/src/bluetooth/domain/value_objects/scan_dictionary.dart';
 
 extension MutableScanDictionary on ScanDictionary {
   ScanDictionary addItem(DiscoveredDevice d) {

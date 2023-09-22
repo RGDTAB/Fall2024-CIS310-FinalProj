@@ -12,7 +12,6 @@ final class AboutStateLoading extends AboutState {
 }
 
 final class AboutStateUpdate extends AboutState {
-  final AppInfoResult appInfoResult;
-
   const AboutStateUpdate({required this.appInfoResult});
+  final AppInfo appInfoResult;
 }

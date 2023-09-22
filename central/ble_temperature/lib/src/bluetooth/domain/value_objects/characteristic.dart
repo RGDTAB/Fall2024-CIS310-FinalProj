@@ -1,6 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class Characteristic extends Equatable {
+  const Characteristic({
+    required this.characteristicId,
+    required this.serviceId,
+    required this.deviceId,
+  });
+
   /// Unique uuid of the specific characteristic
   final String characteristicId;
 
@@ -9,12 +15,6 @@ class Characteristic extends Equatable {
 
   /// Device id of the BLE device
   final String deviceId;
-
-  const Characteristic({
-    required this.characteristicId,
-    required this.serviceId,
-    required this.deviceId,
-  });
 
   @override
   List<Object?> get props => [characteristicId, serviceId, deviceId];

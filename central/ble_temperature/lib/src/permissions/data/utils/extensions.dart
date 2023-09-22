@@ -12,8 +12,10 @@ extension PermissionHandlerStatusExtensions on handler.PermissionStatus {
         return PermissionStatus.limited;
       case handler.PermissionStatus.restricted:
         return PermissionStatus.restricted;
-      default:
+      case handler.PermissionStatus.permanentlyDenied:
         return PermissionStatus.permanentlyDenied;
+      case handler.PermissionStatus.provisional:
+        return PermissionStatus.provisional;
     }
   }
 }

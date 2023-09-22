@@ -17,10 +17,11 @@ class ScanPage extends StatelessWidget {
             title: Text(S.of(context).scanPageTitle),
             actions: [
               IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.aboutPage);
-                  },
-                  icon: const Icon(Icons.info))
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.aboutPage);
+                },
+                icon: const Icon(Icons.info),
+              ),
             ],
           ),
           body: RefreshIndicator(
@@ -29,29 +30,32 @@ class ScanPage extends StatelessWidget {
               return Future.value();
             },
             child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final scan = state.scans.items.values.toList()[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      child: Text('${scan.rssi}'),
-                    ),
-                    title: Text(scan.name),
-                    subtitle: Text(scan.id),
-                    onTap: () {
-                      context.read<ScanCubit>().stopScan();
-                      Navigator.of(context)
-                          .pushNamed(Routes.livePage,
-                              arguments: LivePageParams(device: scan))
-                          .then((value) {
-                        context.read<ScanCubit>().startScan();
-                      });
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-                itemCount: state.scans.items.length),
+              itemBuilder: (context, index) {
+                final scan = state.scans.items.values.toList()[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    child: Text('${scan.rssi}'),
+                  ),
+                  title: Text(scan.name),
+                  subtitle: Text(scan.id),
+                  onTap: () {
+                    context.read<ScanCubit>().stopScan();
+                    Navigator.of(context)
+                        .pushNamed(
+                      Routes.livePage,
+                      arguments: LivePageParams(device: scan),
+                    )
+                        .then((value) {
+                      context.read<ScanCubit>().startScan();
+                    });
+                  },
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+              itemCount: state.scans.items.length,
+            ),
           ),
         );
       },

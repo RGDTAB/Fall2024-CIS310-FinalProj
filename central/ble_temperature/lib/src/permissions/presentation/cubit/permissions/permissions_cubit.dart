@@ -10,11 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'permissions_state.dart';
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  final GetBluetoothScanStatus _getBluetoothScanStatus;
-  final GetBluetoothConnectStatus _getBluetoothConnectStatus;
-  final RequestBluetoothConnect _requestBluetoothConnect;
-  final RequestBluetoothScan _requestBluetoothScan;
-
   PermissionsCubit({
     required GetBluetoothScanStatus getBluetoothScanStatus,
     required GetBluetoothConnectStatus getBluetoothConnectStatus,
@@ -25,20 +20,25 @@ class PermissionsCubit extends Cubit<PermissionsState> {
         _requestBluetoothConnect = requestBluetoothConnect,
         _requestBluetoothScan = requestBluetoothScan,
         super(const PermissionsStateLoading());
+  final GetBluetoothScanStatus _getBluetoothScanStatus;
+  final GetBluetoothConnectStatus _getBluetoothConnectStatus;
+  final RequestBluetoothConnect _requestBluetoothConnect;
+  final RequestBluetoothScan _requestBluetoothScan;
 
   Future<void> update() async {
     final scanStatusResult = await _getBluetoothScanStatus();
     final connectStatusResult = await _getBluetoothConnectStatus();
 
     if (scanStatusResult.isLeft() || connectStatusResult.isLeft()) {
-      // TODO: error
-      // emit(state);
+      emit(const PermissionsStateError());
     } else {
-      emit(PermissionsStateUpdate(
-        statusScan: scanStatusResult.getOrElse(() => PermissionStatus.denied),
-        statusConnect:
-            connectStatusResult.getOrElse(() => PermissionStatus.denied),
-      ));
+      emit(
+        PermissionsStateUpdate(
+          statusScan: scanStatusResult.getOrElse(() => PermissionStatus.denied),
+          statusConnect:
+              connectStatusResult.getOrElse(() => PermissionStatus.denied),
+        ),
+      );
     }
   }
 
@@ -47,12 +47,11 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       case PermissionsStateUpdate():
         final scanResquestResult = await _requestBluetoothScan();
 
-        scanResquestResult.fold((l) {
-          // TODO: error
+        await scanResquestResult.fold((l) {
+          emit(const PermissionsStateError());
         }, (r) async {
           await update();
         });
-        break;
       default:
         break;
     }
@@ -63,13 +62,12 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       case PermissionsStateUpdate():
         final result = await _requestBluetoothConnect();
 
-        result.fold((l) {
-          // TODO: error
+        await result.fold((l) {
+          emit(const PermissionsStateError());
         }, (r) async {
           await update();
         });
 
-        break;
       default:
         break;
     }

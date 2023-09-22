@@ -1,4 +1,4 @@
-import 'package:ble_temperature/core/globals.dart';
+import 'package:ble_temperature/core/app_globals.dart';
 import 'package:ble_temperature/core/errors/error_page.dart';
 import 'package:ble_temperature/src/about/presentation/cubit/about_cubit.dart';
 import 'package:ble_temperature/src/about/presentation/pages/about_page.dart';
@@ -38,13 +38,15 @@ class RouteGenerator {
       case Routes.permissionsPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<PermissionsCubit>(
-              create: (_) => sl()..update(), child: const PermissionsPage()),
+            create: (_) => sl(),
+            child: const PermissionsPage(),
+          ),
           settings: settings,
         );
       case Routes.permissionsLegacyPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<PermissionsLegacyCubit>(
-            create: (_) => sl()..update(),
+            create: (_) => sl(),
             child: const PermissionsLegacyPage(),
           ),
           settings: settings,
@@ -66,12 +68,12 @@ class RouteGenerator {
           settings: settings,
         );
       case Routes.livePage:
-        final params = settings.arguments as LivePageParams;
+        final params = settings.arguments! as LivePageParams;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<LiveCubit>(
             create: (_) => sl()..init(params.device),
             child: LivePage(
-              params: settings.arguments as LivePageParams,
+              params: settings.arguments! as LivePageParams,
             ),
           ),
           settings: settings,

@@ -20,14 +20,22 @@ class DeviceInfoRepositoryImpl implements DeviceInfoRepository {
   }
 
   @override
-  ResultFuture<IOSInfo> getIOSInfo() {
-    // TODO: implement getIOSInfo
-    throw UnimplementedError();
+  ResultFuture<IOSInfo> getIOSInfo() async {
+    try {
+      final result = await _dataSource.getIOSInfo();
+      return right(result);
+    } on Exception catch (e) {
+      return left(DeviceInfoFailure(message: e.toString()));
+    }
   }
 
   @override
-  ResultFuture<DataMap> getInfo() {
-    // TODO: implement getInfo
-    throw UnimplementedError();
+  ResultFuture<DataMap> getInfo() async {
+    try {
+      final result = await _dataSource.getInfo();
+      return right(result);
+    } on Exception catch (e) {
+      return left(DeviceInfoFailure(message: e.toString()));
+    }
   }
 }

@@ -11,15 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'permissions_legacy_state.dart';
 
 class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
-  final IsServiceStatusLocationWhenInUseEnabled
-      _isServiceStatusLocationWhenInUseEnabled;
-
-  final GetLocationWhenInUseStatus _getLocationWhenInUseStatus;
-
-  final OpenSystemAppSettings _openSystemAppSettings;
-
-  final RequestLocationWhenInUse _requestLocationWhenInUse;
-
   PermissionsLegacyCubit({
     required IsServiceStatusLocationWhenInUseEnabled
         isServiceStatusLocationWhenInUseEnabled,
@@ -32,6 +23,14 @@ class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
         _openSystemAppSettings = openSystemAppSettings,
         _requestLocationWhenInUse = requestLocationWhenInUse,
         super(const PermissionsLegacyStateLoading());
+  final IsServiceStatusLocationWhenInUseEnabled
+      _isServiceStatusLocationWhenInUseEnabled;
+
+  final GetLocationWhenInUseStatus _getLocationWhenInUseStatus;
+
+  final OpenSystemAppSettings _openSystemAppSettings;
+
+  final RequestLocationWhenInUse _requestLocationWhenInUse;
 
   Future<void> update() async {
     final isServiceStatusLocationWhenInUseEnabledResult =
@@ -41,24 +40,29 @@ class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
 
     if (isServiceStatusLocationWhenInUseEnabledResult.isLeft() ||
         getLocationWhenInUseStatusResult.isLeft()) {
-      // TODO: error
-      // emit(state);
+      emit(const PermissionsLegacyStateError());
     } else {
-      emit(PermissionsLegacyStateUpdate(
-        serviceLocationEnabled: isServiceStatusLocationWhenInUseEnabledResult
-            .getOrElse(() => false),
-        statusLocationWhenInUse: getLocationWhenInUseStatusResult
-            .getOrElse(() => PermissionStatus.denied),
-      ));
+      emit(
+        PermissionsLegacyStateUpdate(
+          serviceLocationEnabled: isServiceStatusLocationWhenInUseEnabledResult
+              .getOrElse(() => false),
+          statusLocationWhenInUse: getLocationWhenInUseStatusResult
+              .getOrElse(() => PermissionStatus.denied),
+        ),
+      );
     }
   }
 
   Future<void> requestLocation() async {
     switch (state) {
       case PermissionsLegacyStateUpdate():
-        final _ = await _requestLocationWhenInUse();
-        await update();
-        break;
+        final result = await _requestLocationWhenInUse();
+
+        result.fold(
+          (l) => emit(const PermissionsLegacyStateError()),
+          (r) => update(),
+        );
+
       default:
         break;
     }
@@ -68,7 +72,6 @@ class PermissionsLegacyCubit extends Cubit<PermissionsLegacyState> {
     switch (state) {
       case PermissionsLegacyStateUpdate():
         final _ = await _openSystemAppSettings();
-        break;
       default:
         break;
     }

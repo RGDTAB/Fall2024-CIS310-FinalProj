@@ -12,9 +12,8 @@ class LiveStateLoading extends LiveState {
 }
 
 class LiveStateUpdate extends LiveState {
-  final double value;
-
   const LiveStateUpdate({required this.value});
+  final double value;
 }
 
 class LiveStateError extends LiveState {

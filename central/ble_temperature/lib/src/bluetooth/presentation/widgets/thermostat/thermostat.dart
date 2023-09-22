@@ -1,8 +1,19 @@
+import 'package:ble_temperature/src/bluetooth/presentation/widgets/thermostat/thermostat_painter.dart';
 import 'package:flutter/material.dart';
 
-import 'thermostat_painter.dart';
-
 class Thermostat extends StatelessWidget {
+  const Thermostat({
+    required this.value,
+    required this.scaleLow,
+    required this.scaleHight,
+    required this.scaleStep,
+    this.glassColor,
+    this.fillColor,
+    this.scaleColor,
+    this.textColor,
+    this.fontSize,
+    super.key,
+  });
   final double value;
   final double scaleLow;
   final double scaleHight;
@@ -14,18 +25,6 @@ class Thermostat extends StatelessWidget {
   final Color? textColor;
 
   final double? fontSize;
-
-  const Thermostat(
-      {required this.value,
-      required this.scaleLow,
-      required this.scaleHight,
-      required this.scaleStep,
-      this.glassColor,
-      this.fillColor,
-      this.scaleColor,
-      this.textColor,
-      this.fontSize,
-      super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,37 +1,21 @@
-import 'package:ble_temperature/src/bluetooth/data/utils/extensions.dart';
-import 'package:ble_temperature/src/bluetooth/domain/entities/characteristic.dart';
-import 'package:ble_temperature/src/bluetooth/domain/entities/device_connection_state_update.dart';
-import 'package:ble_temperature/src/bluetooth/domain/entities/discovered_device.dart';
-import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
+import 'dart:convert';
 
+import 'package:ble_temperature/src/bluetooth/data/constants/constants.dart';
+import 'package:ble_temperature/src/bluetooth/data/utils/extensions.dart';
+import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
+import 'package:ble_temperature/src/bluetooth/domain/value_objects/device_connection_state_update.dart';
+import 'package:ble_temperature/src/bluetooth/domain/value_objects/discovered_device.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart' as ble;
 
 abstract class BleRemoteDataSource {
-  Stream<DeviceConnectionStateUpdate> get deviceConnectionStateStream;
-  Stream<List<int>> subscribeToCharacteristic(Characteristic characteristic);
-  Future<List<int>> readCharacteristic(Characteristic characteristic);
-  Future<void> writeCharacteristicWithResponse(Characteristic characteristic,
-      {required List<int> value});
-  Future<void> writeCharacteristicWithoutResponse(Characteristic characteristic,
-      {required List<int> value});
-  Future<void> clearGattCache(String deviceId);
-  Future<void> initialize();
-  Future<void> deinitialize();
-  Future<int> requestMtu({required String deviceId, required int mtu});
-  Stream<DiscoveredDevice> scanForDevices({
-    required List<String> withServices,
-    ScanMode scanMode = ScanMode.balanced,
-    bool requireLocationServicesEnabled = true,
-  });
+  Stream<double> subscribeToCharacteristic(String deviceId);
+
+  Stream<DiscoveredDevice> scanForDevices();
+
   Stream<BLEState> bleStateStream();
+
   BLEState bleState();
-  Stream<DeviceConnectionStateUpdate> connectToAdvertisingDevice({
-    required String deviceId,
-    required List<String> withServices,
-    required Duration prescanDuration,
-    Map<String, List<String>>? servicesWithCharacteristicsToDiscover,
-    Duration? connectionTimeout,
-  });
+
   Stream<DeviceConnectionStateUpdate> connectToDevice({
     required String deviceId,
     Map<String, List<String>>? servicesWithCharacteristicsToDiscover,
@@ -40,102 +24,42 @@ abstract class BleRemoteDataSource {
 }
 
 class BleRemoteDataSourceImpl implements BleRemoteDataSource {
+  BleRemoteDataSourceImpl(this._ble);
   final ble.FlutterReactiveBle _ble;
 
-  BleRemoteDataSourceImpl(this._ble);
-
   @override
-  Stream<DeviceConnectionStateUpdate> get deviceConnectionStateStream =>
-      _ble.connectedDeviceStream.map((event) => DeviceConnectionStateUpdate(
-            deviceId: event.deviceId,
-            deviceConnectionState:
-                event.connectionState.toDeviceConnectionState(),
-            error: event.failure,
-          ));
-
-  @override
-  Stream<List<int>> subscribeToCharacteristic(Characteristic characteristic) {
-    return _ble.subscribeToCharacteristic(ble.QualifiedCharacteristic(
-        characteristicId: characteristic.characteristicId.toUuid(),
-        serviceId: characteristic.serviceId.toUuid(),
-        deviceId: characteristic.deviceId));
+  Stream<double> subscribeToCharacteristic(String deviceId) {
+    return _ble
+        .subscribeToCharacteristic(
+          ble.QualifiedCharacteristic(
+            characteristicId: kChrUuid.toUuid(),
+            serviceId: kSrvUuid.toUuid(),
+            deviceId: deviceId,
+          ),
+        )
+        .map((event) => double.parse(const Utf8Decoder().convert(event)));
   }
 
   @override
-  Future<List<int>> readCharacteristic(Characteristic characteristic) async {
-    return await _ble.readCharacteristic(ble.QualifiedCharacteristic(
-        characteristicId: characteristic.characteristicId.toUuid(),
-        serviceId: characteristic.serviceId.toUuid(),
-        deviceId: characteristic.deviceId));
-  }
-
-  @override
-  Future<void> writeCharacteristicWithResponse(Characteristic characteristic,
-      {required List<int> value}) async {
-    await _ble.writeCharacteristicWithResponse(
-      ble.QualifiedCharacteristic(
-          characteristicId: characteristic.characteristicId.toUuid(),
-          serviceId: characteristic.serviceId.toUuid(),
-          deviceId: characteristic.deviceId),
-      value: value,
-    );
-  }
-
-  @override
-  Future<void> writeCharacteristicWithoutResponse(Characteristic characteristic,
-      {required List<int> value}) async {
-    await _ble.writeCharacteristicWithoutResponse(
-      ble.QualifiedCharacteristic(
-          characteristicId: characteristic.characteristicId.toUuid(),
-          serviceId: characteristic.serviceId.toUuid(),
-          deviceId: characteristic.deviceId),
-      value: value,
-    );
-  }
-
-  @override
-  Future<void> clearGattCache(String deviceId) async {
-    await _ble.clearGattCache(deviceId);
-  }
-
-  @override
-  Future<void> initialize() async {
-    await _ble.initialize();
-  }
-
-  @override
-  Future<void> deinitialize() async {
-    await _ble.deinitialize();
-  }
-
-  @override
-  Future<int> requestMtu({required String deviceId, required int mtu}) async {
-    return await _ble.requestMtu(deviceId: deviceId, mtu: mtu);
-  }
-
-  @override
-  Stream<DiscoveredDevice> scanForDevices({
-    required List<String> withServices,
-    ScanMode scanMode = ScanMode.balanced,
-    bool requireLocationServicesEnabled = true,
-  }) {
+  Stream<DiscoveredDevice> scanForDevices() {
     return _ble
         .scanForDevices(
-          withServices: withServices.map((e) => e.toUuid()).toList(),
-          scanMode: scanMode.toScanBleMode(),
-          requireLocationServicesEnabled: requireLocationServicesEnabled,
+          withServices: [],
         )
-        .map((event) => DiscoveredDevice(
+        .map(
+          (event) => DiscoveredDevice(
             id: event.id,
             name: event.name,
             serviceData: {
-              for (var item in event.serviceData.entries)
-                item.key.toString(): item.value
+              for (final item in event.serviceData.entries)
+                item.key.toString(): item.value,
             },
             manufacturerData: event.manufacturerData,
             rssi: event.rssi,
-            serviceUuids:
-                event.serviceUuids.map((e) => e.toString()).toList()));
+            serviceUuids: event.serviceUuids.map((e) => e.toString()).toList(),
+          ),
+        )
+        .where((event) => event.name == kAdvName);
   }
 
   @override
@@ -146,37 +70,6 @@ class BleRemoteDataSourceImpl implements BleRemoteDataSource {
   @override
   BLEState bleState() {
     return _ble.status.toBleStatus();
-  }
-
-  @override
-  Stream<DeviceConnectionStateUpdate> connectToAdvertisingDevice({
-    required String deviceId,
-    required List<String> withServices,
-    required Duration prescanDuration,
-    Map<String, List<String>>? servicesWithCharacteristicsToDiscover,
-    Duration? connectionTimeout,
-  }) {
-    return _ble
-        .connectToAdvertisingDevice(
-            id: deviceId,
-            withServices: withServices.map((e) => e.toUuid()).toList(),
-            prescanDuration: prescanDuration,
-            servicesWithCharacteristicsToDiscover:
-                servicesWithCharacteristicsToDiscover != null
-                    ? {
-                        for (var e
-                            in servicesWithCharacteristicsToDiscover.entries)
-                          e.key.toUuid():
-                              e.value.map((e) => e.toUuid()).toList()
-                      }
-                    : null,
-            connectionTimeout: connectionTimeout)
-        .map((event) => DeviceConnectionStateUpdate(
-              deviceId: event.deviceId,
-              deviceConnectionState:
-                  event.connectionState.toDeviceConnectionState(),
-              error: event.failure,
-            ));
   }
 
   @override
@@ -191,18 +84,20 @@ class BleRemoteDataSourceImpl implements BleRemoteDataSource {
           servicesWithCharacteristicsToDiscover:
               servicesWithCharacteristicsToDiscover != null
                   ? {
-                      for (var e
+                      for (final e
                           in servicesWithCharacteristicsToDiscover.entries)
-                        e.key.toUuid(): e.value.map((e) => e.toUuid()).toList()
+                        e.key.toUuid(): e.value.map((e) => e.toUuid()).toList(),
                     }
                   : null,
           connectionTimeout: connectionTimeout,
         )
-        .map((event) => DeviceConnectionStateUpdate(
-              deviceId: event.deviceId,
-              deviceConnectionState:
-                  event.connectionState.toDeviceConnectionState(),
-              error: event.failure,
-            ));
+        .map(
+          (event) => DeviceConnectionStateUpdate(
+            deviceId: event.deviceId,
+            deviceConnectionState:
+                event.connectionState.toDeviceConnectionState(),
+            error: event.failure,
+          ),
+        );
   }
 }

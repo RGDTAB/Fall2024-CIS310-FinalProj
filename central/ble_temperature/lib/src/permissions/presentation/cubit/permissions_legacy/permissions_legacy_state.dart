@@ -12,14 +12,17 @@ class PermissionsLegacyStateLoading extends PermissionsLegacyState {
 }
 
 class PermissionsLegacyStateUpdate extends PermissionsLegacyState {
-  final bool serviceLocationEnabled;
-  final PermissionStatus statusLocationWhenInUse;
-
   const PermissionsLegacyStateUpdate({
     required this.serviceLocationEnabled,
     required this.statusLocationWhenInUse,
   });
+  final bool serviceLocationEnabled;
+  final PermissionStatus statusLocationWhenInUse;
 
   @override
   List<Object?> get props => [serviceLocationEnabled, statusLocationWhenInUse];
+}
+
+class PermissionsLegacyStateError extends PermissionsLegacyState {
+  const PermissionsLegacyStateError();
 }

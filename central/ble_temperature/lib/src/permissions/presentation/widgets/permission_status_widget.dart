@@ -1,33 +1,43 @@
-import 'package:ble_temperature/core/app_styles.dart';
+import 'package:ble_temperature/core/styles/app_styles.dart';
+import 'package:ble_temperature/generated/l10n.dart';
 import 'package:ble_temperature/src/permissions/domain/enums/permission_status.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../generated/l10n.dart';
-
 class PermissionStatusWidget extends StatelessWidget {
+  const PermissionStatusWidget({
+    required this.title,
+    required this.body,
+    required this.status,
+    required this.action,
+    this.onPressed,
+    super.key,
+  });
   final String title;
   final String body;
   final PermissionStatus status;
   final String action;
   final void Function()? onPressed;
 
-  const PermissionStatusWidget(
-      {required this.title,
-      required this.body,
-      required this.status,
-      required this.action,
-      this.onPressed,
-      Key? key})
-      : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return _buildPermissionEntry(
-        context, title, body, action, status, onPressed);
+      context,
+      title,
+      body,
+      action,
+      status,
+      onPressed,
+    );
   }
 
-  Widget _buildPermissionEntry(BuildContext context, String title, String body,
-      String action, PermissionStatus status, void Function()? onPressed) {
+  Widget _buildPermissionEntry(
+    BuildContext context,
+    String title,
+    String body,
+    String action,
+    PermissionStatus status,
+    void Function()? onPressed,
+  ) {
     return Card(
       margin: AppStyles.edgeInsetsSmall,
       child: Padding(
@@ -53,17 +63,19 @@ class PermissionStatusWidget extends StatelessWidget {
             ),
             const Padding(padding: AppStyles.edgeInsetsMedium),
             Text(
-              '${S.of(context).screenPermissionStatus} ${_statusToString(context, status)}',
+              '${S.of(context).screenPermissionStatus} '
+              '${_statusToString(context, status)}',
             ),
             const Padding(padding: AppStyles.edgeInsetsMedium),
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton.tonal(
-                  onPressed: onPressed,
-                  child: Text(
-                    action,
-                  )),
-            )
+                onPressed: onPressed,
+                child: Text(
+                  action,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -82,6 +94,8 @@ class PermissionStatusWidget extends StatelessWidget {
         return S.of(context).screenPermissionsPermanentlyDenied;
       case PermissionStatus.restricted:
         return S.of(context).screenPermissionsRestricted;
+      case PermissionStatus.provisional:
+        return S.of(context).screenPermissionsProvisional;
     }
   }
 }

@@ -16,7 +16,7 @@ extension ScanModeBleExtensions on ble.ScanMode {
         return ScanMode.lowPower;
       case ble.ScanMode.opportunistic:
         return ScanMode.opportunistic;
-      default:
+      case ble.ScanMode.balanced:
         return ScanMode.balanced;
     }
   }
@@ -31,7 +31,7 @@ extension ScanModeExtensions on ScanMode {
         return ble.ScanMode.lowPower;
       case ScanMode.opportunistic:
         return ble.ScanMode.opportunistic;
-      default:
+      case ScanMode.balanced:
         return ble.ScanMode.balanced;
     }
   }
@@ -46,7 +46,7 @@ extension DeviceConnectionStateExtensions on DeviceConnectionState {
         return ble.DeviceConnectionState.connected;
       case DeviceConnectionState.disconnecting:
         return ble.DeviceConnectionState.disconnecting;
-      default:
+      case DeviceConnectionState.disconnected:
         return ble.DeviceConnectionState.disconnected;
     }
   }
@@ -61,7 +61,7 @@ extension DeviceConnectionStateBleExtensions on ble.DeviceConnectionState {
         return DeviceConnectionState.connected;
       case ble.DeviceConnectionState.disconnecting:
         return DeviceConnectionState.disconnecting;
-      default:
+      case ble.DeviceConnectionState.disconnected:
         return DeviceConnectionState.disconnected;
     }
   }
@@ -80,7 +80,7 @@ extension BleStatusExtensions on ble.BleStatus {
         return BLEState.locationServicesDisabled;
       case ble.BleStatus.ready:
         return BLEState.ready;
-      default:
+      case ble.BleStatus.unknown:
         return BLEState.unknown;
     }
   }

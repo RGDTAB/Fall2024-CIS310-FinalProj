@@ -24,54 +24,51 @@ abstract class PermissionsLocalDataSource {
 class PermissionsLocaDataSourceImpl extends PermissionsLocalDataSource {
   @override
   Future<PermissionStatus> getBluetoothConnectStatus() async {
-    handler.PermissionStatus status =
-        await handler.Permission.bluetoothConnect.status;
+    final status = await handler.Permission.bluetoothConnect.status;
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> getBluetoothScanStatus() async {
-    handler.PermissionStatus status =
-        await handler.Permission.bluetoothScan.status;
+    final status = await handler.Permission.bluetoothScan.status;
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> getBluetoothStatus() async {
-    handler.PermissionStatus status = await handler.Permission.bluetooth.status;
+    final status = await handler.Permission.bluetooth.status;
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> getLocationWhenInUseStatus() async {
-    handler.PermissionStatus status =
-        await handler.Permission.locationWhenInUse.status;
+    final status = await handler.Permission.locationWhenInUse.status;
     return status.toPermissionStatus();
   }
 
   @override
   Future<bool> isBluetoothConnectGranted() async {
-    return await handler.Permission.bluetoothConnect.isGranted;
+    return handler.Permission.bluetoothConnect.isGranted;
   }
 
   @override
   Future<bool> isBluetoothGranted() async {
-    return await handler.Permission.bluetooth.isGranted;
+    return handler.Permission.bluetooth.isGranted;
   }
 
   @override
   Future<bool> isBluetoothScanGranted() async {
-    return await handler.Permission.bluetoothScan.isGranted;
+    return handler.Permission.bluetoothScan.isGranted;
   }
 
   @override
   Future<bool> isLocationWhenInUseGranted() async {
-    return await handler.Permission.locationWhenInUse.isGranted;
+    return handler.Permission.locationWhenInUse.isGranted;
   }
 
   @override
   Future<bool> isServiceStatusLocationWhenInUseEnabled() async {
-    return await handler.Permission.locationWhenInUse.serviceStatus.isEnabled;
+    return handler.Permission.locationWhenInUse.serviceStatus.isEnabled;
   }
 
   @override
@@ -86,29 +83,25 @@ class PermissionsLocaDataSourceImpl extends PermissionsLocalDataSource {
 
   @override
   Future<PermissionStatus> requestBluetooth() async {
-    handler.PermissionStatus status =
-        await handler.Permission.bluetoothScan.request();
+    final status = await handler.Permission.bluetoothScan.request();
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> requestBluetoothConnect() async {
-    handler.PermissionStatus status =
-        await handler.Permission.bluetoothConnect.request();
+    final status = await handler.Permission.bluetoothConnect.request();
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> requestBluetoothScan() async {
-    handler.PermissionStatus status =
-        await handler.Permission.bluetoothScan.request();
+    final status = await handler.Permission.bluetoothScan.request();
     return status.toPermissionStatus();
   }
 
   @override
   Future<PermissionStatus> requestLocationWhenInUse() async {
-    handler.PermissionStatus status =
-        await handler.Permission.locationWhenInUse.request();
+    final status = await handler.Permission.locationWhenInUse.request();
     return status.toPermissionStatus();
   }
 }

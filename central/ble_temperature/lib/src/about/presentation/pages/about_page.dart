@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:ble_temperature/core/app_assets.dart';
-import 'package:ble_temperature/core/app_styles.dart';
-import 'package:ble_temperature/core/globals.dart';
+import 'package:ble_temperature/core/app_globals.dart';
+import 'package:ble_temperature/core/assets/app_assets.dart';
+import 'package:ble_temperature/core/styles/app_styles.dart';
 import 'package:ble_temperature/generated/l10n.dart';
 import 'package:ble_temperature/src/about/presentation/cubit/about_cubit.dart';
 import 'package:flutter/material.dart';
@@ -31,150 +31,161 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).aboutPageTitle),
+      appBar: AppBar(
+        title: Text(S.of(context).aboutPageTitle),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const SizedBox(
+              height: AppStyles.sizeXLarge,
+            ),
+            Center(
+              child: Text(
+                S.of(context).aboutPageHeaderTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            Center(
+              child: Text(
+                S.of(context).aboutPageHeaderSubtitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(
+              height: AppStyles.sizeXLarge,
+            ),
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: _iconHeight,
+                    width: _iconHeight,
+                    child: InkWell(
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse(S.of(context).aboutPageUrlLinkedIn),
+                        );
+                      },
+                      child: const CircleAvatar(
+                        child: Icon(
+                          MdiIcons.linkedin,
+                          size: AppStyles.iconSizeXLarge,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: AppStyles.sizeXLarge,
+                  ),
+                  const VerticalDivider(
+                    thickness: 1,
+                    width: 1,
+                    indent: AppStyles.sizeMedium,
+                    endIndent: AppStyles.sizeMedium,
+                  ),
+                  const SizedBox(
+                    width: AppStyles.sizeXLarge,
+                  ),
+                  SizedBox(
+                    height: _iconHeight,
+                    width: _iconHeight,
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse(S.of(context).aboutPageUrlGitHub),
+                        );
+                      },
+                      child: const CircleAvatar(
+                        child: Icon(
+                          MdiIcons.github,
+                          size: AppStyles.iconSizeXLarge,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: AppStyles.sizeXLarge,
+            ),
+            Padding(
+              padding: AppStyles.edgeInsetsLarge,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).aboutPageTitle,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(
+                    height: AppStyles.sizeSmall,
+                  ),
+                  Text(
+                    S.of(context).aboutPageText,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: AppStyles.sizeXLarge,
+            ),
+            BlocBuilder<AboutCubit, AboutState>(
+              builder: (BuildContext context, state) => switch (state) {
+                AboutStateLoading() => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                AboutStateUpdate(appInfoResult: final info) => ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(S.of(context).aboutPageVersion),
+                    subtitle: Text(
+                      'v${info.version}'
+                      '${Platform.isIOS ? '-${appFlavor.value}' : ''}'
+                      '(${info.buildNumber})',
+                    ),
+                    onTap: () {},
+                  )
+              },
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(
-                height: AppStyles.sizeXLarge,
-              ),
-              Center(
-                child: Text(
-                  S.of(context).aboutPageHeaderTitle,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Center(
-                child: Text(
-                  S.of(context).aboutPageHeaderSubtitle,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              const SizedBox(
-                height: AppStyles.sizeXLarge,
-              ),
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: _iconHeight,
-                      width: _iconHeight,
-                      child: InkWell(
-                        onTap: () {
-                          launchUrl(
-                              Uri.parse(S.of(context).aboutPageUrlLinkedIn));
-                        },
-                        child: const CircleAvatar(
-                          child: Icon(
-                            MdiIcons.linkedin,
-                            size: AppStyles.iconSizeXLarge,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: AppStyles.sizeXLarge,
-                    ),
-                    const VerticalDivider(
-                      thickness: 1,
-                      width: 1,
-                      indent: AppStyles.sizeMedium,
-                      endIndent: AppStyles.sizeMedium,
-                    ),
-                    const SizedBox(
-                      width: AppStyles.sizeXLarge,
-                    ),
-                    SizedBox(
-                      height: _iconHeight,
-                      width: _iconHeight,
-                      child: InkWell(
-                        customBorder: const CircleBorder(),
-                        onTap: () {
-                          launchUrl(
-                              Uri.parse(S.of(context).aboutPageUrlGitHub));
-                        },
-                        child: const CircleAvatar(
-                          child: Icon(
-                            MdiIcons.github,
-                            size: AppStyles.iconSizeXLarge,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: AppStyles.sizeXLarge,
-              ),
-              Padding(
-                padding: AppStyles.edgeInsetsLarge,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      S.of(context).aboutPageTitle,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(
-                      height: AppStyles.sizeSmall,
-                    ),
-                    Text(
-                      S.of(context).aboutPageText,
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: AppStyles.sizeXLarge,
-              ),
-              BlocBuilder<AboutCubit, AboutState>(
-                  builder: (BuildContext context, state) => switch (state) {
-                        AboutStateLoading() => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        AboutStateUpdate(appInfoResult: final info) => ListTile(
-                            leading: const Icon(Icons.info_outline),
-                            title: Text(S.of(context).aboutPageVersion),
-                            subtitle: Text(
-                              'v${info.version}${Platform.isIOS ? '-${appFlavor.value}' : ''} (${info.buildNumber})',
-                            ),
-                            onTap: () {},
-                          )
-                      }),
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   Widget _buildHeader(BuildContext context) {
     return SizedBox(
       height: _bgHeight + (_avatarHeight / 2),
-      child: Stack(children: [
-        Positioned(
-          child: SizedBox(
+      child: Stack(
+        children: [
+          Positioned(
+            child: SizedBox(
               height: _bgHeight,
               width: double.infinity,
               child: Image.asset(
                 AppAssets.imageAboutBg,
                 fit: BoxFit.cover,
-              )),
-        ),
-        Positioned(
+              ),
+            ),
+          ),
+          Positioned(
             bottom: 0,
             left: (MediaQuery.of(context).size.width / 2) - (_avatarHeight / 2),
             child: SizedBox(
-                height: _avatarHeight,
-                width: _avatarHeight,
-                child: const CircleAvatar(
-                  backgroundImage: AssetImage(AppAssets.imageAboutMe),
-                )))
-      ]),
+              height: _avatarHeight,
+              width: _avatarHeight,
+              child: const CircleAvatar(
+                backgroundImage: AssetImage(AppAssets.imageAboutMe),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

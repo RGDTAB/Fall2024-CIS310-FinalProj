@@ -1,17 +1,15 @@
+import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
 import 'package:equatable/equatable.dart';
 
-import '../enums/enums.dart';
-
 class DeviceConnectionStateUpdate extends Equatable {
-  final String deviceId;
-  final DeviceConnectionState deviceConnectionState;
-  final Object? error;
-
   const DeviceConnectionStateUpdate({
     required this.deviceId,
     required this.deviceConnectionState,
     this.error,
   });
+  final String deviceId;
+  final DeviceConnectionState deviceConnectionState;
+  final Object? error;
 
   @override
   List<Object?> get props => [

@@ -4,4 +4,5 @@ enum PermissionStatus {
   restricted,
   limited,
   permanentlyDenied,
+  provisional,
 }
