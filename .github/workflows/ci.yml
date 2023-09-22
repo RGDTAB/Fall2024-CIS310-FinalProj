@@ -36,7 +36,9 @@ jobs:
 
     - name: Create generated files
       working-directory: central/ble_temperature/
-      run: dart run build_runner build
+      run: |
+        flutter pub run intl_utils:generate
+        dart run build_runner build
     
     - name: Check for any formatting issues
       working-directory: central/ble_temperature/
