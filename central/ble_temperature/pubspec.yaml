@@ -22,6 +22,7 @@ dependencies:
   get_it: ^7.4.0
   intl_utils: ^2.8.2
   material_design_icons_flutter: ^6.0.7096
+  mockito: ^5.4.2
   package_info_plus: ^4.1.0
   path_provider: ^2.0.15
   permission_handler: ^10.4.5
