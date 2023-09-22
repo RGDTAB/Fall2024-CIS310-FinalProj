@@ -13,13 +13,16 @@ abstract class DeviceInfoLocalDataSource {
 }
 
 class DeviceInfoLocalDataSourceImpl implements DeviceInfoLocalDataSource {
+  DeviceInfoLocalDataSourceImpl(this._plugin);
+  final info_plus.DeviceInfoPlugin _plugin;
+
   @override
   Future<AndroidInfo> getAndroidInfo() async {
     if (!Platform.isAndroid) {
       throw Exception('Wrong platform.');
     }
 
-    final info = await info_plus.DeviceInfoPlugin().androidInfo;
+    final info = await _plugin.androidInfo;
     return info.toAndroidInfo();
   }
 
@@ -29,13 +32,13 @@ class DeviceInfoLocalDataSourceImpl implements DeviceInfoLocalDataSource {
       throw Exception('Wrong platform.');
     }
 
-    final info = await info_plus.DeviceInfoPlugin().iosInfo;
+    final info = await _plugin.iosInfo;
     return info.toIOSInfo();
   }
 
   @override
   Future<Map<String, dynamic>> getInfo() async {
-    final info = await info_plus.DeviceInfoPlugin().deviceInfo;
+    final info = await _plugin.deviceInfo;
     return info.data;
   }
 }

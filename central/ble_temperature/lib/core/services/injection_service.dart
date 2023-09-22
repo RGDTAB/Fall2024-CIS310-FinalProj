@@ -1,8 +1,12 @@
 import 'package:ble_temperature/core/app_globals.dart';
 import 'package:ble_temperature/core/enums/app_flavor.dart';
-import 'package:ble_temperature/src/about/data/datasources/app_info_impl.dart';
+import 'package:ble_temperature/src/about/data/datasources/app_info_local_data_source.dart';
+import 'package:ble_temperature/src/about/data/datasources/launch_url_local_data_source.dart';
 import 'package:ble_temperature/src/about/data/repositories/app_info_repository_impl.dart';
+import 'package:ble_temperature/src/about/data/repositories/launch_url_repositpory_impl.dart';
 import 'package:ble_temperature/src/about/domain/repositories/app_info_repository.dart';
+import 'package:ble_temperature/src/about/domain/repositories/launch_url_repositpory.dart';
+import 'package:ble_temperature/src/about/domain/usecases/launch_url.dart';
 import 'package:ble_temperature/src/about/domain/usecases/load_app_info.dart';
 import 'package:ble_temperature/src/about/presentation/cubit/about_cubit.dart';
 import 'package:ble_temperature/src/bluetooth/data/datasources/ble_remote_data_source.dart';
@@ -26,7 +30,7 @@ import 'package:ble_temperature/src/permissions/domain/usecases/get_permission_p
 import 'package:ble_temperature/src/permissions/domain/usecases/request_bluetooth_connect.dart';
 import 'package:ble_temperature/src/permissions/domain/usecases/request_bluetooth_scan.dart';
 import 'package:ble_temperature/src/permissions/presentation/cubit/permissions/permissions_cubit.dart';
-import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class InjectionContainer {
@@ -53,8 +57,9 @@ class InjectionContainer {
         PermissionsLocaDataSourceImpl.new,
       )
       ..registerLazySingleton<DeviceInfoLocalDataSource>(
-        DeviceInfoLocalDataSourceImpl.new,
+        () => DeviceInfoLocalDataSourceImpl(sl()),
       )
+      ..registerLazySingleton(DeviceInfoPlugin.new)
 
       // BLE
       ..registerFactory(() => InitBleCubit(listenBleState: sl()))
@@ -72,18 +77,23 @@ class InjectionContainer {
       ..registerLazySingleton<BleRemoteDataSource>(
         () => BleRemoteDataSourceImpl(sl()),
       )
-      ..registerLazySingleton<FlutterReactiveBle>(FlutterReactiveBle.new)
+      ..registerLazySingleton(FlutterReactiveBle.new)
 
       // About
-      ..registerFactory(() => AboutCubit(loadAppInfo: sl()))
+      ..registerFactory(() => AboutCubit(launchUrl: sl(), loadAppInfo: sl()))
+      ..registerLazySingleton(() => LaunchUrl(sl()))
       ..registerLazySingleton(() => LoadAppInfo(sl()))
       ..registerLazySingleton<AppInfoRepository>(
         () => AppInfoRepositoryImpl(sl()),
       )
+      ..registerLazySingleton<LaunchUrlRepository>(
+        () => LaunchUrlRepositoryImpl(sl()),
+      )
       ..registerLazySingleton<AppInfoLocalDataSource>(
-        () => AppInfoLocalDataSourceImpl(),
+        AppInfoLocalDataSourceImpl.new,
+      )
+      ..registerLazySingleton<LaunchUrlLocalDataSource>(
+        LaunchUrlLocalDataSourceImpl.new,
       );
-
-    debugPrint('Service locator completed.');
   }
 }

@@ -7,6 +7,8 @@ abstract class AppInfoLocalDataSource {
 }
 
 class AppInfoLocalDataSourceImpl implements AppInfoLocalDataSource {
+  const AppInfoLocalDataSourceImpl();
+
   @override
   Future<AppInfo> getInfo() async {
     final result = await info.PackageInfo.fromPlatform();
