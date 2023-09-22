@@ -1,14 +1,14 @@
-import 'package:domain/domain.dart';
+import 'package:ble_temperature/core/app_flavor.dart';
+import 'package:ble_temperature/core/services/router_service.dart';
+import 'package:ble_temperature/src/permissions/domain/enums/permission_platform_info.dart';
+import 'package:ble_temperature/src/permissions/domain/usecases/get_permission_platform_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'config/app_flavor.dart';
-import 'config/app_routes.dart';
 import 'generated/l10n.dart';
-import 'globals.dart';
-import 'injection_container.dart';
-import 'presentation/pages/error/error_page.dart';
+import 'core/globals.dart';
+import 'core/services/injection_service.dart';
 
 Future<void> mainCommon() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,14 +21,16 @@ Future<void> mainCommon() async {
   var initialRoute = Routes.scanPage;
 
   if (appFlavor != AppFlavor.sim) {
-    final result = await getIt<PermissionsCheck>().call(const NoParams());
+    final getPermissionPlatformInfo = sl<GetPermissionPlatformInfo>();
+    final result = await getPermissionPlatformInfo();
     initialRoute = result.fold((l) => Routes.errorPage, (r) {
-      if (r.hasAllPermissions) {
-        return Routes.bleInitPage;
-      } else if (r.isLegacy ?? false) {
-        return Routes.permissionsLegacyPage;
-      } else {
-        return Routes.permissionsPage;
+      switch (r) {
+        case PermissionPlatformInfo.granted:
+          return Routes.bleInitPage;
+        case PermissionPlatformInfo.notGranted:
+          return Routes.permissionsPage;
+        default:
+          return Routes.permissionsLegacyPage;
       }
     });
   }
