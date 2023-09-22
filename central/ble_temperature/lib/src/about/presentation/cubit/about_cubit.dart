@@ -23,7 +23,6 @@ class AboutCubit extends Cubit<AboutState> {
   }
 
   Future<void> launchUrl(String url) async {
-    debugPrint(url);
     final _ = await _launchUrl(url);
   }
 }
