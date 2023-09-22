@@ -8,7 +8,6 @@ import 'package:ble_temperature/src/about/presentation/cubit/about_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -67,9 +66,9 @@ class _AboutPageState extends State<AboutPage> {
                     width: _iconHeight,
                     child: InkWell(
                       onTap: () {
-                        launchUrl(
-                          Uri.parse(S.of(context).aboutPageUrlLinkedIn),
-                        );
+                        context
+                            .read<AboutCubit>()
+                            .launchUrl(S.of(context).aboutPageUrlLinkedIn);
                       },
                       child: const CircleAvatar(
                         child: Icon(
@@ -97,9 +96,9 @@ class _AboutPageState extends State<AboutPage> {
                     child: InkWell(
                       customBorder: const CircleBorder(),
                       onTap: () {
-                        launchUrl(
-                          Uri.parse(S.of(context).aboutPageUrlGitHub),
-                        );
+                        context
+                            .read<AboutCubit>()
+                            .launchUrl(S.of(context).aboutPageUrlGitHub);
                       },
                       child: const CircleAvatar(
                         child: Icon(
