@@ -26,6 +26,7 @@ import 'package:ble_temperature/src/permissions/domain/usecases/get_permission_p
 import 'package:ble_temperature/src/permissions/domain/usecases/request_bluetooth_connect.dart';
 import 'package:ble_temperature/src/permissions/domain/usecases/request_bluetooth_scan.dart';
 import 'package:ble_temperature/src/permissions/presentation/cubit/permissions/permissions_cubit.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 class InjectionContainer {
@@ -79,8 +80,10 @@ class InjectionContainer {
       ..registerLazySingleton<AppInfoRepository>(
         () => AppInfoRepositoryImpl(sl()),
       )
-      ..registerLazySingleton(
-        AppInfoLocalDataSourceImpl.new,
+      ..registerLazySingleton<AppInfoLocalDataSource>(
+        () => AppInfoLocalDataSourceImpl(),
       );
+
+    debugPrint('Service locator completed.');
   }
 }

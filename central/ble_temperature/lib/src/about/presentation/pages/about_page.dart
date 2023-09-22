@@ -33,6 +33,7 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).aboutPageTitle),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -6,8 +6,19 @@ import 'package:ble_temperature/src/bluetooth/presentation/cubit/init_ble/init_b
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InitBlePage extends StatelessWidget {
+class InitBlePage extends StatefulWidget {
   const InitBlePage({super.key});
+
+  @override
+  State<InitBlePage> createState() => _InitBlePageState();
+}
+
+class _InitBlePageState extends State<InitBlePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<InitBleCubit>().init();
+  }
 
   @override
   Widget build(BuildContext context) {

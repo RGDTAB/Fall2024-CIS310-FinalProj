@@ -54,7 +54,7 @@ class RouteGenerator {
       case Routes.bleInitPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<InitBleCubit>(
-            create: (_) => sl()..init(),
+            create: (_) => sl(),
             child: const InitBlePage(),
           ),
           settings: settings,
@@ -62,16 +62,15 @@ class RouteGenerator {
       case Routes.scanPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<ScanCubit>(
-            create: (_) => sl()..startScan(),
+            create: (_) => sl(),
             child: const ScanPage(),
           ),
           settings: settings,
         );
       case Routes.livePage:
-        final params = settings.arguments! as LivePageParams;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<LiveCubit>(
-            create: (_) => sl()..init(params.device),
+            create: (_) => sl(),
             child: LivePage(
               params: settings.arguments! as LivePageParams,
             ),

@@ -75,6 +75,7 @@ class _PermissionsPageState extends State<PermissionsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).screenPermissionsTitle),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: const Center(
         child: CircularProgressIndicator(),
@@ -90,6 +91,7 @@ class _PermissionsPageState extends State<PermissionsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).screenPermissionsTitle),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -126,6 +128,7 @@ class _PermissionsPageState extends State<PermissionsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).screenPermissionsTitle),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
         child: Padding(

@@ -18,6 +18,9 @@ class PermissionsStateUpdate extends PermissionsState {
   });
   final PermissionStatus statusScan;
   final PermissionStatus statusConnect;
+
+  @override
+  List<Object?> get props => [statusScan, statusConnect];
 }
 
 class PermissionsStateError extends PermissionsState {

@@ -5,8 +5,19 @@ import 'package:ble_temperature/src/bluetooth/presentation/pages/live/live_page_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ScanPage extends StatelessWidget {
+class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
+
+  @override
+  State<ScanPage> createState() => _ScanPageState();
+}
+
+class _ScanPageState extends State<ScanPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ScanCubit>().startScan();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +26,7 @@ class ScanPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(S.of(context).scanPageTitle),
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             actions: [
               IconButton(
                 onPressed: () {

@@ -8,9 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class LivePage extends StatelessWidget {
+class LivePage extends StatefulWidget {
   const LivePage({required this.params, super.key});
   final LivePageParams params;
+
+  @override
+  State<LivePage> createState() => _LivePageState();
+}
+
+class _LivePageState extends State<LivePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LiveCubit>().init(widget.params.device);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +36,8 @@ class LivePage extends StatelessWidget {
 
   Widget _buildLoading(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(params.device.name),
+          title: Text(widget.params.device.name),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
             IconButton(
               onPressed: () {
@@ -40,7 +52,8 @@ class LivePage extends StatelessWidget {
 
   Widget _buildUpdate(BuildContext context, double value) => Scaffold(
         appBar: AppBar(
-          title: Text(params.device.name),
+          title: Text(widget.params.device.name),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
             IconButton(
               onPressed: () {
@@ -88,7 +101,8 @@ class LivePage extends StatelessWidget {
 
   Widget _buildError(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(params.device.name),
+          title: Text(widget.params.device.name),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
             IconButton(
               onPressed: () {
@@ -110,7 +124,7 @@ class LivePage extends StatelessWidget {
                 ),
                 OutlinedButton.icon(
                   onPressed: () {
-                    context.read<LiveCubit>().retry(params.device);
+                    context.read<LiveCubit>().retry(widget.params.device);
                   },
                   icon: const Icon(MdiIcons.reload),
                   label: Text(S.of(context).livePageLabelRetry),
