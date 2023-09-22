@@ -67,13 +67,10 @@ class PermissionStatusWidget extends StatelessWidget {
               '${_statusToString(context, status)}',
             ),
             const Padding(padding: AppStyles.edgeInsetsMedium),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FilledButton.tonal(
-                onPressed: onPressed,
-                child: Text(
-                  action,
-                ),
+            OutlinedButton(
+              onPressed: status == PermissionStatus.granted ? null : onPressed,
+              child: Text(
+                action,
               ),
             ),
           ],

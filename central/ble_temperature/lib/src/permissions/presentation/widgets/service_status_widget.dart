@@ -67,13 +67,10 @@ class ServiceStatusWidget extends StatelessWidget {
             const Padding(
               padding: AppStyles.edgeInsetsMedium,
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: FilledButton.tonal(
-                onPressed: onPressed,
-                child: Text(
-                  action,
-                ),
+            OutlinedButton(
+              onPressed: status ? null : onPressed,
+              child: Text(
+                action,
               ),
             ),
           ],

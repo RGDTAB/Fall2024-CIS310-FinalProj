@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:ble_temperature/core/constants/app_ble.dart';
 import 'package:ble_temperature/src/bluetooth/domain/usecases/start_scan.dart';
 import 'package:ble_temperature/src/bluetooth/domain/value_objects/discovered_device.dart';
 import 'package:ble_temperature/src/bluetooth/domain/value_objects/mutable_scan_dictionary.dart';
@@ -19,7 +17,7 @@ class ScanCubit extends Cubit<ScanState> {
   StreamSubscription<DiscoveredDevice>? _sub;
 
   Future<void> startScan() async {
-    _startScan(AppBle.advName).listen(_onScan);
+    _startScan().listen(_onScan);
   }
 
   void _onScan(DiscoveredDevice d) {
