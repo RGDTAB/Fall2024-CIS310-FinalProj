@@ -31,17 +31,22 @@ jobs:
         channel: 'stable'
 
     - name: Install dependencies
+      working-directory: ./centeral/ble_temperature/
       run: flutter pub get
 
     - name: Create generated files
+      working-directory: ./centeral/ble_temperature/
       run: dart run build_runner build
     
     - name: Check for any formatting issues
+      working-directory: ./centeral/ble_temperature/
       run: dart format --set-exit-if-changed .
     
     - name: Statically analyze code
+      working-directory: ./centeral/ble_temperature/
       run: flutter analyze .
 
     # run tests
     - name: Run Tests
+      working-directory: ./centeral/ble_temperature/
       run: flutter test
