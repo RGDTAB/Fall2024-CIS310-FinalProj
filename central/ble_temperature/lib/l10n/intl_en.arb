@@ -40,7 +40,7 @@
     "aboutPageTitle": "About",
     "aboutPageHeaderTitle": "Daniel Wolf",
     "aboutPageHeaderSubtitle": "Software Developer",
-    "aboutPageUrlLinkedIn": " https://www.linkedin.com/in/daniel-wolf-31471626b/",
+    "aboutPageUrlLinkedIn": "https://www.linkedin.com/in/daniel-wolf-31471626b/",
     "aboutPageUrlGitHub": "https://github.com/d-wolf/",
     "aboutPageText": "This project demonstrates how to create a simple Bluetooth Low Energy cross-platform application using Flutter. If you have set up your peripheral correctly it should be shown on the discovery page. If you are going to click the peripheral a connection will be established and temperature values will be updated continuously.\n\nTo get in contact please hit the LinkedIn icon above. Hit the GitHub icon to check out the source code.",
     "aboutPageVersion": "Version"
