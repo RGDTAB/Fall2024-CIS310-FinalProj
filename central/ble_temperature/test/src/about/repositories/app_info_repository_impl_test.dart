@@ -26,7 +26,7 @@ void main() {
     expect(repository, isA<AppInfoRepository>());
   });
 
-  test('description', () async {
+  test('Returns [AppInfo] successfully.', () async {
     const tInfo = AppInfo(
       appName: 'appName',
       packageName: 'packageName',
