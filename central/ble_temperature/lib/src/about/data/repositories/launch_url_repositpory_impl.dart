@@ -11,8 +11,13 @@ class LaunchUrlRepositoryImpl implements LaunchUrlRepository {
   @override
   ResultFuture<void> launchUrl(String url) async {
     try {
-      await _localDataSource.launchUrl(url);
-      return right(null);
+      final result = await _localDataSource.launchUrl(url);
+
+      if (!result) {
+        return right(null);
+      }
+
+      throw Exception('Unexpected error.');
     } on Exception catch (e) {
       return left(LaunchUrlFailure(message: e.toString()));
     }

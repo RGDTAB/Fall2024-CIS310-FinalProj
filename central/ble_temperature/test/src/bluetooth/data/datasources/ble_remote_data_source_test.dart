@@ -34,7 +34,7 @@ void main() {
   test(
       '[BleRemoteDataSource.connectToDevice] emits '
       '[DeviceConnectionStateUpdate()]', () {
-    when(ble.connectToDevice(id: any)).thenAnswer(
+    when(ble.connectToDevice(id: anyNamed('id'))).thenAnswer(
       (_) => Stream.fromIterable([
         const reactive_ble.ConnectionStateUpdate(
           connectionState: reactive_ble.DeviceConnectionState.connected,
