@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ble_temperature/src/bluetooth/data/utils/datablock.dart';
 import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
 import 'package:ble_temperature/src/bluetooth/domain/usecases/connect.dart';
 import 'package:ble_temperature/src/bluetooth/domain/usecases/listen_data.dart';
@@ -21,7 +22,7 @@ class LiveCubit extends Cubit<LiveState> {
   final ListenData _listenData;
 
   StreamSubscription<DeviceConnectionStateUpdate>? _connectionSub;
-  StreamSubscription<double>? _valueSub;
+  StreamSubscription<Datablock>? _valueSub;
 
   Future<void> init(DiscoveredDevice device) async {
     switch (state) {
@@ -55,7 +56,7 @@ class LiveCubit extends Cubit<LiveState> {
     ).listen((event) {
       emit(
         LiveStateUpdate(
-          value: event,
+          data: event,
         ),
       );
     });

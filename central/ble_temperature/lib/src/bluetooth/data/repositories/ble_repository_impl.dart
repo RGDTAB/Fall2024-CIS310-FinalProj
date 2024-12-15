@@ -1,5 +1,6 @@
 import 'package:ble_temperature/core/typedefs/typedefs.dart';
 import 'package:ble_temperature/src/bluetooth/data/datasources/ble_remote_data_source.dart';
+import 'package:ble_temperature/src/bluetooth/data/utils/datablock.dart';
 import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
 import 'package:ble_temperature/src/bluetooth/domain/errors/failures.dart';
 import 'package:ble_temperature/src/bluetooth/domain/respositories/ble_repository.dart';
@@ -41,7 +42,7 @@ class BleRepositoryImpl implements BleRepository {
   }
 
   @override
-  ResultStream<double> subscribeToCharacteristic(String deviceId) {
+  ResultStream<Datablock> subscribeToCharacteristic(String deviceId) {
     return _remoteDataSource.subscribeToCharacteristic(deviceId);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ble_temperature/core/typedefs/typedefs.dart';
+import 'package:ble_temperature/src/bluetooth/data/utils/datablock.dart';
 import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
 import 'package:ble_temperature/src/bluetooth/domain/respositories/ble_repository.dart';
 import 'package:ble_temperature/src/bluetooth/domain/value_objects/device_connection_state_update.dart';
@@ -9,10 +10,17 @@ import 'package:dartz/dartz.dart';
 
 class BleRepositoryFake implements BleRepository {
   @override
-  ResultStream<double> subscribeToCharacteristic(String deviceId) {
+  ResultStream<Datablock> subscribeToCharacteristic(String deviceId) {
     return Stream.periodic(
       const Duration(seconds: 1),
-      (i) => i % 50,
+      (i) {
+        var temp = i % 100;
+        var hum = 0.0;
+        var light = 0;
+        var noise = 1;
+        return Datablock(temp: temp.toDouble(), hum: hum, light: light, noise: noise,
+          flag: false,);
+      },
     );
   }
 

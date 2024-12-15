@@ -10,6 +10,6 @@ extension InfoExtensionsAndroid on info_plus.AndroidDeviceInfo {
 
 extension InfoExtensionsIOS on info_plus.IosDeviceInfo {
   IOSInfo toIOSInfo() {
-    return IOSInfo(systemVersion: systemVersion!);
+    return IOSInfo(systemVersion: systemVersion);
   }
 }

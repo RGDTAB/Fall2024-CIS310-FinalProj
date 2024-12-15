@@ -3,6 +3,6 @@ import 'package:ble_temperature/core/enums/app_flavor.dart';
 import 'package:ble_temperature/main_common.dart';
 
 void main() async {
-  appFlavor = AppFlavor.sim;
+  customAppFlavor = AppFlavor.sim;
   await mainCommon();
 }

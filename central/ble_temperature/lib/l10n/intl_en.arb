@@ -31,7 +31,7 @@
     "scanPageTitle": "Discovered devices",
 
     "livePageCardTitle": "Temperature",
-    "livePageUnit": "°C",
+    "livePageUnit": "°F",
     "livePageError": "An unexpected error occurred. Please check if the peripheral is in range and powered.",
     "livePageLabelRetry": "Retry",
 

@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
                             .read<AboutCubit>()
                             .launchUrl(S.of(context).aboutPageUrlLinkedIn);
                       },
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         child: Icon(
                           MdiIcons.linkedin,
                           size: AppStyles.iconSizeXLarge,
@@ -100,7 +100,7 @@ class _AboutPageState extends State<AboutPage> {
                             .read<AboutCubit>()
                             .launchUrl(S.of(context).aboutPageUrlGitHub);
                       },
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         child: Icon(
                           MdiIcons.github,
                           size: AppStyles.iconSizeXLarge,
@@ -145,7 +145,7 @@ class _AboutPageState extends State<AboutPage> {
                     title: Text(S.of(context).aboutPageVersion),
                     subtitle: Text(
                       'v${info.version}'
-                      '${Platform.isIOS ? '-${appFlavor.value}' : ''}'
+                      '${Platform.isIOS ? '-${customAppFlavor.value}' : ''}'
                       '(${info.buildNumber})',
                     ),
                     onTap: () {},

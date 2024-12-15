@@ -16,10 +16,10 @@ Future<void> mainCommon() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  await InjectionContainer().init(appFlavor);
+  await InjectionContainer().init(customAppFlavor);
   var initialRoute = Routes.scanPage;
 
-  if (appFlavor != AppFlavor.sim) {
+  if (customAppFlavor != AppFlavor.sim) {
     final getPermissionPlatformInfo = sl<GetPermissionPlatformInfo>();
     final result = await getPermissionPlatformInfo();
     initialRoute = result.fold((l) => Routes.errorPage, (r) {
@@ -51,7 +51,10 @@ class MyApp extends StatelessWidget {
       onGenerateTitle: (context) => S.of(context).appTitle,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: appFlavor == AppFlavor.sim ? Colors.blue : Colors.red,
+          seedColor: customAppFlavor == AppFlavor.sim ?
+            Colors.blue
+            : const Color.fromARGB(255, 102, 87, 111),
+          brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),

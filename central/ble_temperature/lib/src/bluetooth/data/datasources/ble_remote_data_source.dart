@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ble_temperature/src/bluetooth/data/constants/constants.dart';
+import 'package:ble_temperature/src/bluetooth/data/utils/datablock.dart';
 import 'package:ble_temperature/src/bluetooth/data/utils/extensions.dart';
 import 'package:ble_temperature/src/bluetooth/domain/enums/enums.dart';
 import 'package:ble_temperature/src/bluetooth/domain/value_objects/device_connection_state_update.dart';
@@ -8,7 +9,7 @@ import 'package:ble_temperature/src/bluetooth/domain/value_objects/discovered_de
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart' as ble;
 
 abstract class BleRemoteDataSource {
-  Stream<double> subscribeToCharacteristic(String deviceId);
+  Stream<Datablock> subscribeToCharacteristic(String deviceId);
 
   Stream<DiscoveredDevice> scanForDevices();
 
@@ -26,9 +27,10 @@ abstract class BleRemoteDataSource {
 class BleRemoteDataSourceImpl implements BleRemoteDataSource {
   BleRemoteDataSourceImpl(this._ble);
   final ble.FlutterReactiveBle _ble;
+  bool flag = false;
 
   @override
-  Stream<double> subscribeToCharacteristic(String deviceId) {
+  Stream<Datablock> subscribeToCharacteristic(String deviceId) {
     return _ble
         .subscribeToCharacteristic(
           ble.QualifiedCharacteristic(
@@ -37,7 +39,19 @@ class BleRemoteDataSourceImpl implements BleRemoteDataSource {
             deviceId: deviceId,
           ),
         )
-        .map((event) => double.parse(const Utf8Decoder().convert(event)));
+        .map((event) {
+          var temp = 0.0;
+          temp = double.parse(const Utf8Decoder().convert(event, 0, 5)) / 10.0;
+          var hum = 0.0;
+          hum = double.parse(const Utf8Decoder().convert(event, 5, 10)) / 10.0;
+          var noise = 0;
+          noise = int.parse(const Utf8Decoder().convert(event, 10, 15));
+          var light = 0;
+          light = int.parse(const Utf8Decoder().convert(event, 15, 20));
+          flag = !flag;
+          return Datablock(temp: temp, hum: hum, light: light, noise: noise,
+            flag:flag);
+        });
   }
 
   @override
