@@ -1,26 +1,37 @@
 #include <ArduinoBLE.h>
 #include <Arduino_HS300x.h>
+#include <PDM.h>
+#include <Arduino_APDS9960.h>
 
-#define VALUE_SIZE 20
+static const int VALUE_SIZE = 20;
 
-BLEService temperatureService = BLEService("00000000-5EC4-4083-81CD-A10B8D5CF6EC");
-BLECharacteristic temperatureCharacteristic = BLECharacteristic("00000001-5EC4-4083-81CD-A10B8D5CF6EC", BLERead | BLENotify, VALUE_SIZE);
+static const char channels = 1;
+// default PCM output frequency
+static const int frequency = 16000;
+// Buffer to read samples into, each sample is 16-bits
+short sampleBuffer[512];
+// Number of audio samples read
+volatile int samplesRead;
+short maxNoise = 0;
+int averageALight;
+int sum = 0.0;
+int reads = 0;
 
-// last temperature reading
-int oldTemperature = 0;
-// last time the temperature was checked in ms
+BLEService dataService = BLEService("00000000-5EC4-4083-81CD-A10B8D5CF6EC");
+BLECharacteristic dataCharacteristic = BLECharacteristic("00000001-5EC4-4083-81CD-A10B8D5CF6EC", BLERead | BLENotify, VALUE_SIZE);
+
 long previousMillis = 0;
 
 void setup() {
   // initialize serial communication
   Serial.begin(9600);
-  while (!Serial)
-    ;
+  while (!Serial);
+
+  PDM.onReceive(onPDMdata);
 
   if (!HS300x.begin()) {
     Serial.println("Failed to initialize HS300x.");
-    while (1)
-      ;
+    while (1);
   }
 
   // initialize the built-in LED pin to indicate when a central is connected
@@ -28,19 +39,26 @@ void setup() {
 
   if (!BLE.begin()) {
     Serial.println("starting BLE failed!");
-
-    while (1)
-      ;
+    while (1);
   }
 
-  BLE.setLocalName("BLE-TEMP");
-  BLE.setDeviceName("BLE-TEMP");
+  if (!PDM.begin(channels, frequency)) {
+    Serial.println("Failed to start PDM!");
+    while (1);
+  }
+
+  if (!APDS.begin()) {
+    Serial.println("Error initializing APDS-9960 sensor.");
+  }
+
+  BLE.setLocalName("SLP_DATA");
+  BLE.setDeviceName("SLP_DATA");
   // add the temperature characteristic
-  temperatureService.addCharacteristic(temperatureCharacteristic);
+  dataService.addCharacteristic(dataCharacteristic);
   // add the service
-  BLE.addService(temperatureService);
+  BLE.addService(dataService);
   // set initial value for this characteristic
-  temperatureCharacteristic.writeValue("0.0");
+  dataCharacteristic.writeValue("0.0");
   // start advertising
   BLE.advertise();
 
@@ -50,6 +68,9 @@ void setup() {
 void loop() {
   // wait for a Bluetooth® Low Energy central
   BLEDevice central = BLE.central();
+  while (!APDS.colorAvailable()) {
+    delay(5);
+  }
 
   // if a central is connected to the peripheral:
   if (central) {
@@ -61,12 +82,37 @@ void loop() {
 
 
     // while the central is connected
-    // update temperature every 200ms
+    // update temperature every 5000ms
     while (central.connected()) {
+      int r, g, b, a;
       long currentMillis = millis();
-      if (currentMillis - previousMillis >= 200) {
+
+      if (APDS.colorAvailable()) {
+        APDS.readColor(r, g, b, a);
+        sum += a;
+        reads++;
+      }
+
+      for (int i = 0; i < samplesRead; i++) {
+        if(channels == 2) {
+         Serial.print("L:");
+          Serial.print(sampleBuffer[i]);
+         Serial.print(" R:");
+          i++;
+        }
+        if (sampleBuffer[i] > maxNoise) {
+          maxNoise = sampleBuffer[i];
+        }
+        
+      }
+
+      if (currentMillis - previousMillis >= 5000) {
         previousMillis = currentMillis;
-        updateTemperature();
+        averageALight = sum / reads;
+        updateReadings(maxNoise, averageALight);
+        maxNoise = 0;
+        sum = 0.0;
+        reads = 0;
       }
     }
 
@@ -77,15 +123,38 @@ void loop() {
   }
 }
 
-void updateTemperature() {
-  float temperature = HS300x.readTemperature();
+void updateReadings(short loudest, int light) {
+  int temp = HS300x.readTemperature(FAHRENHEIT) * 10;
+  int hum = HS300x.readHumidity() * 10;
 
-  if (temperature != oldTemperature) {
-    char buffer[VALUE_SIZE];
-    int ret = snprintf(buffer, sizeof buffer, "%f", temperature);
-    if (ret >= 0) {
-      temperatureCharacteristic.writeValue(buffer);
-      oldTemperature = temperature;
-    }
+  char buffer[VALUE_SIZE];
+  for (int i = (VALUE_SIZE / 4) - 1; i >= 0; i--) {
+    buffer[i] = (temp % 10) + '0';
+    temp /= 10;
   }
+  for (int i = (VALUE_SIZE / 2) - 1; i >= VALUE_SIZE / 4; i--) {
+    buffer[i] = (hum % 10) + '0';
+    hum /= 10;
+  }
+  for (int i = (VALUE_SIZE * 3 / 4) - 1; i >= VALUE_SIZE / 2; i--) {
+    buffer[i] = (loudest % 10) + '0';
+    loudest /= 10;
+  }
+  for (int i = VALUE_SIZE - 1; i >= VALUE_SIZE * 3 / 4; i--) {
+    buffer[i] = (light % 10) + '0';
+    light /= 10;
+  }
+
+  dataCharacteristic.writeValue(buffer, VALUE_SIZE, true);
+}
+
+void onPDMdata() {
+  // Query the number of available bytes
+  int bytesAvailable = PDM.available();
+
+  // Read into the sample buffer
+  PDM.read(sampleBuffer, bytesAvailable);
+
+  // 16-bit, 2 bytes per sample
+  samplesRead = bytesAvailable / 2;
 }
